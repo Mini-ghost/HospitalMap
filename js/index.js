@@ -6,7 +6,7 @@ var District = []
 var AppData = {
   hospitalData: [],
   District: [],
-  OptionSelect: "選擇行政區"
+  OptionSelect: "全部"
 }
 
 var vm = new Vue({
@@ -14,12 +14,21 @@ var vm = new Vue({
   data: AppData,
   methods: {
     optionClick: function(){
-      $(".optionBox").toggleClass("opt-hide")
+      var element , open
+      element = document.getElementsByClassName("optionBox")[0]
+      element.classList.toggle("opt-hide")
+      
+      open = document.getElementsByClassName("select")[0]
+      open.classList.toggle("active")
     },
     optionSelect: function(res){
-      this.OptionSelect = res
-      $(".select").text(res)
-      $(".optionBox").toggleClass("opt-hide")
+      vm.OptionSelect = res
+      var element , open
+      element = document.getElementsByClassName("optionBox")[0]
+      element.classList.toggle("opt-hide")
+      
+      open = document.getElementsByClassName("select")[0]
+      open.classList.toggle("active")
     }
   },
 })
