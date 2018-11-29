@@ -115,13 +115,13 @@ ul {
 }
 .filter .selectBox .select:hover, .filter .selectBox .select.active {
   border: 1px solid #F78500;
-  box-shadow: 0 0 0 1px rgba(247, 133, 0, 0.2);
+  box-shadow: 0 0 0 1px rgba(247, 133, 0, 0.2), 0 0 5px rgba(247, 133, 0, 0.2) inset;
 }
 .filter .selectBox .select:hover:after, .filter .selectBox .select.active:after {
   border-top: 8px solid #F78500;
 }
 .filter .selectBox .select.active {
-  box-shadow: 0 0 0 1.5px rgba(247, 133, 0, 0.5), 0 0 5px rgba(247, 133, 0, 0.9);
+  box-shadow: 0 0 0 1px rgba(247, 133, 0, 0.5), 0 0 5px rgba(247, 133, 0, 0.9), 0 0 1px rgba(247, 133, 0, 0.5) inset;
 }
 .filter .selectBox .select:after {
   content: "";
@@ -248,6 +248,7 @@ ul.hospitalBox li.hospital .content h2.title {
 }
 ul.hospitalBox li.hospital .content .icon {
   margin-right: 5px;
+  width: 12px;
 }
 ul.hospitalBox li.hospital .content ul {
   margin: 15px 0;
