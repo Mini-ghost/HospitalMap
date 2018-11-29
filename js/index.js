@@ -15,45 +15,23 @@ var vm = new Vue({
   methods: {
     optionClick: function(){
       var element , open
-      element = document.getElementsByClassName("optionBox")[0]
-      element.classList.toggle("opt-hide")
-      
-      open = document.getElementsByClassName("select")[0]
-      open.classList.toggle("active")
+      SelectShow()
     },
     optionSelect: function(res){
       vm.OptionSelect = res
-      var element , open
-      element = document.getElementsByClassName("optionBox")[0]
-      element.classList.toggle("opt-hide")
-      
-      open = document.getElementsByClassName("select")[0]
-      open.classList.toggle("active")
+      SelectShow()
     }
   },
 })
 
-// function createSelect(){
-//   var selElmnt =  document.getElementById("selectBox")
-
-//   var sel = document.createElement("div")
-//   sel.setAttribute("class", "select")
-//   sel.setAttribute("onclick", "vm.optionClick()") 
-//   sel.innerHTML = vm.OptionSelect
-//   selElmnt.appendChild(sel)
-  
-//   var opts = document.createElement("div")
-//   opts.setAttribute("class", "optionBox opt-hide")
-//   selElmnt.appendChild(opts)
-  
-//   vm.District.forEach((obj,index)=>{
-//     var opt = document.createElement("div")
-//     opt.setAttribute("class", "option")
-//     opt.setAttribute("onclick", "vm.optionSelect('"+ obj +"')")
-//     opt.innerHTML = obj
-//     opts.appendChild(opt)
-//   })
-// }
+// 控制 select 開合
+function SelectShow(){
+  var element , open
+  element = document.getElementsByClassName("optionBox")[0]
+  element.classList.toggle("opt-hide")
+  open = document.getElementsByClassName("select")[0]
+  open.classList.toggle("active")
+}
 
 $.ajax({
   url: hospitalAPI,
@@ -83,3 +61,27 @@ $.ajax({
   error: function(){
   }
 })
+
+
+// 刪除
+// function createSelect(){
+//   var selElmnt =  document.getElementById("selectBox")
+
+//   var sel = document.createElement("div")
+//   sel.setAttribute("class", "select")
+//   sel.setAttribute("onclick", "vm.optionClick()") 
+//   sel.innerHTML = vm.OptionSelect
+//   selElmnt.appendChild(sel)
+  
+//   var opts = document.createElement("div")
+//   opts.setAttribute("class", "optionBox opt-hide")
+//   selElmnt.appendChild(opts)
+  
+//   vm.District.forEach((obj,index)=>{
+//     var opt = document.createElement("div")
+//     opt.setAttribute("class", "option")
+//     opt.setAttribute("onclick", "vm.optionSelect('"+ obj +"')")
+//     opt.innerHTML = obj
+//     opts.appendChild(opt)
+//   })
+// }

@@ -148,6 +148,7 @@ ul {
   transition: 0.5s;
   z-index: 9;
   background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 10px rgba(247, 133, 0, 0.9);
 }
 .filter .selectBox .optionBox.opt-hide {
   display: none;
@@ -164,6 +165,7 @@ ul {
   top: -7.02135785px;
   right: 20px;
   background-color: #fff;
+  z-index: -9;
 }
 .filter .selectBox .optionBox .option {
   position: relative;
@@ -258,16 +260,16 @@ ul.hospitalBox li.hospital .content ul li {
   margin: 5px 0;
   color: #a9a9a9;
 }
-ul.hospitalBox li.hospital .content span.pet {
-  padding: 2px 20px;
-  background-color: #c36b03;
-  margin: 0 1px;
-  border-radius: 15px;
-  color: white;
-  font-size: 12px;
-  font-weight: 500;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+ul.hospitalBox li.hospital .content .pet span, ul.hospitalBox li.hospital .content .service span {
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: #a9a9a9;
+  margin-right: 5px;
+  color: #ffa53b;
+}
+ul.hospitalBox li.hospital .content .pet span:before, ul.hospitalBox li.hospital .content .service span:before {
+  content: "#";
+}
+ul.hospitalBox li.hospital .content .service span {
+  color: #1176af;
 }
