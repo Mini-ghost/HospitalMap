@@ -1,4 +1,4 @@
-var Key = "1lshg7wIpbOx9SMeV325oZDhEx1zLJcpsZwVOmEDATBM"
+var Key = "1KvTCKEUPkwf6Usl4gPGgPw5iksE6DErYnHs2zxsY2i0"
 var hospitalAPI = "https://spreadsheets.google.com/feeds/list/"+ Key +"/1/public/values?alt=json"
 
 var District = []
