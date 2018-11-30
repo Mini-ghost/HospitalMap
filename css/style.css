@@ -17,7 +17,7 @@ ul {
 
 .header {
   position: relative;
-  background-image: url(https://images.pexels.com/photos/74177/cat-74177.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
+  background-image: url(../images/cat-74177.jpeg);
   background-position: center;
   background-size: cover;
   display: flex;
