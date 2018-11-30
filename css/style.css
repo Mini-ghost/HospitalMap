@@ -9,6 +9,10 @@ body {
   background-color: #fefefe;
 }
 
+a {
+  text-decoration: none;
+}
+
 ul {
   margin: 0;
   padding: 0;
@@ -17,7 +21,7 @@ ul {
 
 .header {
   position: relative;
-  background-image: url(../images/cat-74177.jpeg);
+  background-image: url(https://mini-ghost.github.io/HospitalMap/images/cat-74177.jpeg);
   background-position: center;
   background-size: cover;
   display: flex;
@@ -98,12 +102,10 @@ ul {
 .filter .selectBox {
   position: relative;
 }
-.filter .selectBox * {
-  font-size: 14px;
-}
 .filter .selectBox .select {
   position: relative;
   font-weight: 700;
+  font-size: 14px;
   border: 1px solid #a9a9a9;
   border-radius: 5px;
   padding: 5px;
@@ -121,6 +123,7 @@ ul {
   border-top: 8px solid #F78500;
 }
 .filter .selectBox .select.active {
+  background-color: rgba(247, 133, 0, 0.1);
   box-shadow: 0 0 0 1px rgba(247, 133, 0, 0.5), 0 0 5px rgba(247, 133, 0, 0.9), 0 0 1px rgba(247, 133, 0, 0.5) inset;
 }
 .filter .selectBox .select:after {
@@ -136,8 +139,9 @@ ul {
 .filter .selectBox .optionBox {
   position: absolute;
   width: 100%;
-  bottom: -105px;
+  top: 35px;
   font-weight: 700;
+  font-size: 14px;
   margin-top: 10px;
   border: 1px solid #F78500;
   border-radius: 5px;
@@ -162,14 +166,13 @@ ul {
   border-left: 1px solid #F78500;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
-  top: -7.02135785px;
+  top: -6px;
   right: 20px;
   background-color: #fff;
-  z-index: -9;
 }
 .filter .selectBox .optionBox .option {
   position: relative;
-  padding: 5px;
+  padding: 8px;
   cursor: pointer;
   font-weight: 500;
 }
@@ -183,13 +186,27 @@ ul {
   background-color: #F78500;
   color: white;
 }
+.filter .sendBox {
+  background-color: #F78500;
+  color: white;
+  text-align: center;
+  padding: 2px;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  border: 1px solid #F78500;
+}
 
 ul.hospitalBox {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-star;
   width: 80%;
-  margin: 20px 0;
+  margin: 20px 5px;
 }
 @media(max-width: 768px) {
   ul.hospitalBox {
@@ -197,8 +214,8 @@ ul.hospitalBox {
   }
 }
 ul.hospitalBox li.hospital {
-  width: 32.5%;
-  margin: 10px 1px;
+  width: 31.5%;
+  margin: 10px 5px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-bottom: 8px solid #F78500;
@@ -211,12 +228,12 @@ ul.hospitalBox li.hospital:hover .img {
 }
 @media(max-width: 900px) {
   ul.hospitalBox li.hospital {
-    width: 49%;
+    width: 48%;
   }
 }
 @media(max-width: 768px) {
   ul.hospitalBox li.hospital {
-    width: 49%;
+    width: 47%;
   }
 }
 @media(max-width: 420px) {
@@ -272,4 +289,19 @@ ul.hospitalBox li.hospital .content .pet span:before, ul.hospitalBox li.hospital
 }
 ul.hospitalBox li.hospital .content .service span {
   color: #1176af;
+}
+
+.footer {
+  height: 40px;
+  background-color: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.footer a {
+  color: white;
+  font-weight: 300;
+}
+.footer i {
+  margin-right: 5px;
 }

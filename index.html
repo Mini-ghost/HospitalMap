@@ -15,47 +15,50 @@
 <body>
 
   
-  <div id="app">
-    <header class="header">
-      <div class="titleBox">
-        <h1 class="title">台中動物醫院地圖</h1>
-        <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung Animals Hospital Map</span></h2>
-      </div>
-    </header>
-    <section class="section">
-      <div class="contender">
-        <div class="flexBox">
-          <div class="filter">
-            <h3>區域選擇</h3>
-            <div class="selectBox"> 
-              <div class="select" @click="optionClick()">{{AppData.OptionSelect}}</div>
-              <div class="optionBox opt-hide">
-                <div class="option" @click="optionSelect('全部')">全部</div>
-                <div class="option" v-for="Btn in AppData.District" @click="optionSelect(Btn)">{{Btn}}</div>
-              </div>
+<div id="app">
+  <header class="header">
+    <div class="titleBox">
+      <h1 class="title">台中動物醫院地圖</h1>
+      <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung Animals Hospital Map</span></h2>
+    </div>
+  </header>
+  <section class="section">
+    <div class="contender">
+      <div class="flexBox">
+        <div class="filter">
+          <h3>條件篩選</h3>
+          <div class="selectBox"> 
+            <div class="select" @click="optionClick()">{{AppData.OptionSelect}}</div>
+            <div class="optionBox opt-hide">
+              <div class="option" @click="optionSelect('全部')">全部</div>
+              <div class="option" v-for="Btn in AppData.District" @click="optionSelect(Btn)">{{Btn}}</div>
             </div>
           </div>
-          <ul class="hospitalBox">
-            <li class="hospital" v-for="Data in AppData.hospitalData">
-              <div class="imgBox">
-                <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
-                <div class="district">{{Data.district}}</div>
-              </div>
-              <div class="content">
-                <h2 class="title">{{Data.name}} </h2>
-                <ul>
-                  <li class="address"><span class="icon fas fa-map-marker-alt"></span><span>{{Data.address}}</span></li>
-                  <li class="openTime"> <span class="icon fas fa-clock"></span><span>{{Data.time}}</span></li>
-                </ul>
-                <div class="pet"><span v-for="Pet in Data.pet">{{Pet}}</span></div>
-                <div class="service"><span v-for="Ser in Data.service">{{Ser}}</span></div>
-              </div>
-            </li>
-          </ul>
+          <div class="sendBox" @click="filter(AppData.OptionSelect)">確認</div>
         </div>
+        <ul class="hospitalBox">
+          <li class="hospital" v-for="Data in AppData.filterData">
+            <div class="imgBox">
+              <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
+              <div class="district">{{Data.district}}</div>
+            </div>
+            <div class="content">
+              <h2 class="title">{{Data.name}} </h2>
+              <ul>
+                <li class="address"><span class="icon fas fa-map-marker-alt"></span><span>{{Data.address}}</span></li>
+                <li class="openTime"> <span class="icon fas fa-clock"></span><span>{{Data.time}}</span></li>
+              </ul>
+              <div class="pet"><span v-for="Pet in Data.pet">{{Pet}}</span></div>
+              <div class="service"><span v-for="Ser in Data.service">{{Ser}}</span></div>
+            </div>
+          </li>
+        </ul>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
+  <footer class="footer"><a href="" target="_blank"> <i class="fab fa-github"></i><span>GitHub</span></a></footer>
+</div>
+
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
   <script  src="js/index.js"></script>

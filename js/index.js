@@ -6,6 +6,7 @@ var District = []
 var AppData = {
   hospitalData: [],
   District: [],
+  filterData: [],
   OptionSelect: "全部"
 }
 
@@ -20,6 +21,14 @@ var vm = new Vue({
     optionSelect: function(res){
       vm.OptionSelect = res
       SelectShow()
+    },
+    filter: function(res){
+      this.filterData = this.hospitalData.filter((obj)=>{
+        return obj.district == res
+      })
+      if(res == "全部"){
+        this.filterData = this.hospitalData
+      }
     }
   },
 })
@@ -51,37 +60,13 @@ $.ajax({
       service: obj.gsx$服務類別.$t.split(", "),
       outward: obj.gsx$外觀照片網址.$t
     }))
+    vm.filterData = vm.hospitalData
     vm.hospitalData.forEach((obj,index)=>{
       if(vm.District.indexOf(obj.district) == -1){
         vm.District.push(obj.district)
       }
     })
-    // createSelect();
   },
   error: function(){
   }
 })
-
-
-// 刪除
-// function createSelect(){
-//   var selElmnt =  document.getElementById("selectBox")
-
-//   var sel = document.createElement("div")
-//   sel.setAttribute("class", "select")
-//   sel.setAttribute("onclick", "vm.optionClick()") 
-//   sel.innerHTML = vm.OptionSelect
-//   selElmnt.appendChild(sel)
-  
-//   var opts = document.createElement("div")
-//   opts.setAttribute("class", "optionBox opt-hide")
-//   selElmnt.appendChild(opts)
-  
-//   vm.District.forEach((obj,index)=>{
-//     var opt = document.createElement("div")
-//     opt.setAttribute("class", "option")
-//     opt.setAttribute("onclick", "vm.optionSelect('"+ obj +"')")
-//     opt.innerHTML = obj
-//     opts.appendChild(opt)
-//   })
-// }
