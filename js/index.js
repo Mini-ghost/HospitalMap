@@ -205,28 +205,3 @@ function Positioning(){
   function error(){}
   navigator.geolocation.watchPosition(success, error)
 }
-
-
-// 刪除
-// function createSelect(){
-//   var selElmnt =  document.getElementById("selectBox")
-
-//   var sel = document.createElement("div")
-//   sel.setAttribute("class", "select")
-//   sel.setAttribute("onclick", "vm.optionClick()") 
-//   sel.innerHTML = vm.OptionSelect
-//   selElmnt.appendChild(sel)
-
-  
-//   var opts = document.createElement("div")
-//   opts.setAttribute("class", "optionBox opt-hide")
-//   selElmnt.appendChild(opts)
-  
-//   vm.District.forEach((obj,index)=>{
-//     var opt = document.createElement("div")
-//     opt.setAttribute("class", "option")
-//     opt.setAttribute("onclick", "vm.optionSelect('"+ obj +"')")
-//     opt.innerHTML = obj
-//     opts.appendChild(opt)
-//   })
-// }
