@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en" >
 
 <head>
   <meta charset="UTF-8">
-  <title>台中動物醫院地圖｜ Taichung Animal Hospital Map</title>
+  <title>台中動物醫院地圖｜ Taichung Veterinary Hospital Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
   
   <link rel='stylesheet' href='https://fonts.googleapis.com/earlyaccess/notosanstc.css'>
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css'>
-  <link rel="stylesheet" href="css/style.css">
+<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css'>
 
+      <link rel="stylesheet" href="css/style.css">
+
+  
 </head>
 
 <body>
@@ -19,49 +22,86 @@
   <header class="header">
     <div class="titleBox">
       <h1 class="title">台中動物醫院地圖</h1>
-      <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung Animals Hospital Map</span></h2>
+      <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung 	Veterinary Hospital Map</span></h2>
     </div>
   </header>
   <section class="section">
     <div class="contender">
       <div class="flexBox">
         <div class="filter">
-          <h3>條件篩選</h3>
-          <div class="selectBox"> 
-            <div class="select" @click="optionClick()">{{AppData.OptionSelect}}</div>
-            <div class="optionBox opt-hide">
-              <div class="option" @click="optionSelect('全部')">全部</div>
-              <div class="option" v-for="Btn in AppData.District" @click="optionSelect(Btn)">{{Btn}}</div>
+          <div class="controlArea">
+            <h3 class="subTitle">條件篩選</h3>
+            <div class="selectBox" id="District">
+              <h4>區域選擇</h4>
+              <div class="select" @click="optionClick()">{{AppData.districtFilter}}</div>
+              <div class="optionBox opt-hide">
+                <div class="option" @click="optionSelect('全部')">全部</div>
+                <div class="option" v-for="Btn in AppData.District" :value="Btn.id" @click="optionSelect(Btn.name)">{{Btn.name}}</div>
+              </div>
+            </div>
+            <div class="radioBox" id="pet">
+              <h4>寵物類型</h4>
+              <div class="radios">
+                <div class="radiosBtn">
+                  <input type="radio" id="allPet" name="pet" checked="checked"/>
+                  <label for="allPet" name="pet" @click="petSelect('全部')">全部</label>
+                </div>
+                <div class="radiosBtn" v-for="Pet in AppData.Pets">
+                  <input type="radio" :id="Pet.id" name="pet"/>
+                  <label :for="Pet.id" name="pet" @click="petSelect(Pet.value)">{{Pet.name}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="radioBox" id="Open">
+              <h4>營業中</h4>
+              <div class="radios">
+                <div class="radiosBtn">
+                  <input type="radio" id="allSelect" name="isOpen" checked="checked"/>
+                  <label for="allSelect" name="isOpen" @click="isOpenSlect('全部')">全部</label>
+                </div>
+                <div class="radiosBtn" v-for="">
+                  <input type="radio" id="nowOpen" name="isOpen"/>
+                  <label for="nowOpen" name="isOpen" @click="isOpenSlect(true)">營業中</label>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="sendBox" @click="filter(AppData.OptionSelect)">確認</div>
         </div>
-        <ul class="hospitalBox">
-          <li class="hospital" v-for="Data in AppData.filterData">
-            <div class="imgBox">
-              <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
-              <div class="district">{{Data.district}}</div>
-            </div>
-            <div class="content">
-              <h2 class="title">{{Data.name}} </h2>
-              <ul>
-                <li class="address"><span class="icon fas fa-map-marker-alt"></span><span>{{Data.address}}</span></li>
-                <li class="openTime"> <span class="icon fas fa-clock"></span><span>{{Data.time}}</span></li>
-              </ul>
-              <div class="pet"><span v-for="Pet in Data.pet">{{Pet}}</span></div>
-              <div class="service"><span v-for="Ser in Data.service">{{Ser}}</span></div>
-            </div>
-          </li>
-        </ul>
+        <div class="vetContent">
+          <h3 class="subTitle">動物醫院總覽<i>//依照直線距離排序</i></h3>
+          <ul class="hospitalBox" id="Overview">
+            <li class="hospital" v-for="Data in filterData">
+              <div class="imgBox">
+                <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
+                <div class="district">{{Data.district}}</div>
+              </div>
+              <div class="content"><span class="isOpen" :class="(Data.isOpen)?'true':'false'">{{(Data.isOpen)? '營業中':'休息中'}}</span><span class="_24hr" v-if="Data._24hr">24hr</span>
+                <h2 class="title">{{Data.name}} </h2>
+                <ul>
+                  <li class="address"><span class="icon right fas fa-map-marker-alt"></span><span>{{Data.address}}</span></li>
+                  <li class="openTime"> <span class="icon fas fa-clock"></span><span>{{Data.time}}</span></li>
+                </ul>
+                <div class="pet"><span v-for="Pet in Data.pet">{{Pet}}</span></div>
+                <div class="service"><span v-for="Ser in Data.service">{{Ser}}</span></div>
+              </div>
+            </li>
+            <li class="emptyData" v-if="filterData.length == 0">
+              <div class="emoticons">(^-^*)</div>
+              <div class="PromptText">No 	veterinary hospital found!</div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
-  <footer class="footer"><a href="https://github.com/Mini-ghost/HospitalMap" target="_blank"> <i class="fab fa-github"></i><span>GitHub</span></a></footer>
+  <footer class="footer"><a href="http://github.com/Mini-ghost/" target="_blank"> <i class="fab fa-github"></i><span>GitHub</span></a></footer>
 </div>
-
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
-  <script  src="js/index.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
+
+  
+
+    <script  src="js/index.js"></script>
 
 
 
