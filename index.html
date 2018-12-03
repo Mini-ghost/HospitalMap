@@ -78,7 +78,7 @@
           </div>
         </div>
         <div class="vetContent">
-          <h3 class="subTitle">動物醫院總覽<i>//依照直線距離排序</i></h3>
+          <h3 class="subTitle">動物醫院總覽<i>//依照{{(AppData.position.length>0)? '直線距離':'新增時間'}}排序</i></h3>
           <ul class="hospitalBox" id="Overview">
             <li class="hospital" v-for="Data in filterData">
               <div class="imgBox">
