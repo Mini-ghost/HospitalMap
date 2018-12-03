@@ -27,7 +27,7 @@ ul {
 .header {
   position: relative;
   background-image: url(../images/cat-74177.jpeg);
-  background-position: 50% 35%;
+  background-position: center;
   background-size: cover;
   display: flex;
   justify-content: center;
