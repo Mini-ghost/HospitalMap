@@ -29,7 +29,6 @@ ul {
   background-image: url(../images/cat-74177.jpeg);
   background-position: 50% 35%;
   background-size: cover;
-  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
