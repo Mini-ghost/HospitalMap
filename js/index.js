@@ -43,9 +43,13 @@ var Pets = [
   {name: "爬蟲類", value: "爬蟲類", id: "reptile"}
 ]
 
+var vetSelect = {
+  type: false,
+  data: {}
+}
+
 var AppData = {
   vetData: [],
-  nearestData: [],
   District: District,
   Pets: Pets,
   timeData: "",
@@ -53,6 +57,8 @@ var AppData = {
   PetFilter: "全部",
   isOpenFilter: "全部",
   position: [],
+  isposition: "",
+  vetSelect: vetSelect
 }
 
 var vm = new Vue({
@@ -79,6 +85,20 @@ var vm = new Vue({
       if(res == "全部"){
         this.filterData = this.vetData
       }
+    },
+    detail: function(res){
+      this.vetSelect.data = res
+      this.vetSelect.type = true
+      
+      $("body").addClass("scrollbar-none")
+      
+      detailMap()
+    },
+    closeDetail: function(){
+      
+      vm.vetSelect.type = false
+      $("body").removeClass("scrollbar-none")
+      
     }
   },
   computed: {
@@ -102,6 +122,8 @@ var vm = new Vue({
       }
       
       return filterArry.sort((a,b)=>{return a.nearest - b.nearest})
+
+      
     },
   }
 })
@@ -116,6 +138,7 @@ $.ajax({
   success: function(res){
     vm.vetData = res.feed.entry.map((obj)=>({
       name: obj.gsx$醫院名稱.$t,
+      phone: obj.gsx$電話號碼.$t,
       time: obj.gsx$營業日.$t,
       detialTime: obj.gsx$詳細看診時間.$t.replace(/[\u4e00-\u9fa5]{3}\s*/g,"").split("\n"),
       web: obj.gsx$網站連結.$t,
@@ -195,13 +218,31 @@ function isOpen(res){
 }
 
 // 使用者定位
+var pos = vm.vetSelect.data.positioning
 function Positioning(){
   function success(res){
     var latitude, longitude
     latitude = res.coords.latitude
     longitude = res.coords.longitude
     vm.position = [latitude,longitude]
+    vm.isposition = true
   }
-  function error(){}
+  function error(){
+    vm.isposition = false
+  }
   navigator.geolocation.watchPosition(success, error)
+}
+// google map
+function detailMap(){
+  var mapData = vm.vetSelect.data
+  var map = new google.maps.Map(document.getElementById("map"),{
+    center: {lat: Number(mapData.positioning[0]) ,lng: Number(mapData.positioning[1])},
+    zoom: 18,
+  })
+
+  var marker = new google.maps.Marker({
+    position: {lat: Number(mapData.positioning[0]) ,lng: Number(mapData.positioning[1])},
+    map: map,
+    title: mapData.name
+  })
 }
