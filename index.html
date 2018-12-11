@@ -23,32 +23,19 @@
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
   </script>
   
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130590667-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-130590667-1');
-  </script>
-
-  
 </head>
 
 <body>
 
   
-<body>
-
 <div id="app">
   <header class="header">
     <div class="titleBox">
       <h1 class="title">台中動物醫院地圖</h1>
-      <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung  Veterinary Hospital Map</span></h2>
+      <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung Veterinary Hospital Map</span></h2>
     </div>
   </header>
-  <section id="section">
+  <section class="section">
     <div class="contender">
       <div class="flexBox">
         <div class="filter">
@@ -76,7 +63,7 @@
               </div>
             </div>
             <div class="radioBox" id="Open">
-              <h4>看診中</h4>
+              <h4>營業中</h4>
               <div class="radios">
                 <div class="radiosBtn">
                   <input type="radio" id="allSelect" name="isOpen" checked="checked"/>
@@ -84,21 +71,21 @@
                 </div>
                 <div class="radiosBtn" v-for="">
                   <input type="radio" id="nowOpen" name="isOpen"/>
-                  <label for="nowOpen" name="isOpen" @click="isOpenSlect(true)">看診中</label>
+                  <label for="nowOpen" name="isOpen" @click="isOpenSlect(true)">營業中</label>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="vetContent">
-          <h3 class="subTitle">動物醫院總覽<i>//依照{{(AppData.isposition)? '直線距離':'新增時間'}}排序</i></h3>
-          <ul class="hospitalBox" id="Overview" v-if="filterData.length != 0">
-            <li class="hospital" v-for="Data in filterData" @click="detail(Data)">
+          <h3 class="subTitle">動物醫院總覽<i>//依照{{(AppData.position.length>0)? '直線距離':'新增時間'}}排序</i></h3>
+          <ul class="hospitalBox" id="Overview">
+            <li class="hospital" v-for="Data in filterData">
               <div class="imgBox">
                 <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
                 <div class="district">{{Data.district}}</div>
               </div>
-              <div class="content"><span class="isOpen" :class="(Data.isOpen)?'true':'false'">{{(Data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="Data._24hr">24hr</span>
+              <div class="content"><span class="isOpen" :class="(Data.isOpen)?'true':'false'">{{(Data.isOpen)? '營業中':'休息中'}}</span><span class="_24hr" v-if="Data._24hr">24hr</span>
                 <h2 class="title">{{Data.name}} </h2>
                 <ul>
                   <li class="address"><span class="icon right fas fa-map-marker-alt"></span><span>{{Data.address}}</span></li>
@@ -108,30 +95,13 @@
                 <div class="service"><span v-for="Ser in Data.service">{{Ser}}</span></div>
               </div>
             </li>
-          </ul>
-          <ul class="empty" v-if="filterData.length == 0">
-            <li class="emptyData">
+            <li class="emptyData" v-if="filterData.length == 0">
               <div class="emoticons">(^-^*)</div>
-              <div class="PromptText">No  veterinary hospital found!</div>
+              <div class="PromptText">No 	veterinary hospital found!</div>
             </li>
           </ul>
         </div>
       </div>
-    </div>
-  </section>
-  <section id="detail" v-show="AppData.vetSelect.type">
-    <div class="detailBox">
-      <div class="img" :style="'background-image: url('+ AppData.vetSelect.data.outward + ')'"></div>
-      <div class="content"><span class="isOpen" :class="(AppData.vetSelect.data.isOpen)?'true':'false'">{{(AppData.vetSelect.data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="AppData.vetSelect.data._24hr">24hr</span>
-        <h2 class="title">{{AppData.vetSelect.data.name}}</h2>
-        <ul>
-          <li><span class="icon right fas fa-map-marker-alt"></span><span>{{AppData.vetSelect.data.address}}</span></li>
-          <li><span class="icon fas fa-clock"></span><span>{{AppData.vetSelect.data.time}}</span></li>
-          <li><span class="icon fas fa-phone"></span><span>{{AppData.vetSelect.data.phone}}</span></li>
-        </ul>
-        <div class="hashtag"><span class="pet" v-for="Pet in AppData.vetSelect.data.pet">{{Pet}}</span><span class="ser" v-for="Ser in AppData.vetSelect.data.service">{{Ser}}</span></div>
-        <div id="map"></div>
-      </div><span class="close fas fa-times" @click="closeDetail()"></span>
     </div>
   </section>
   <footer class="footer"><a href="http://github.com/Mini-ghost/" target="_blank"> <i class="fab fa-github"></i><span>GitHub</span></a></footer>
@@ -139,7 +109,6 @@
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
-  <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyASmyX9Rc19poJMP4slFBw6okH1opr9TvE&callback=initMap'></script>
   <script  src="js/index.js"></script>
 
 </body>
