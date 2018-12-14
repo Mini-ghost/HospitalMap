@@ -171,7 +171,7 @@ h3.subTitle i {
 }
 .filter .selectBox .select.active {
   background-color: rgba(247, 133, 0, 0.1);
-  box-shadow: 0 0 0 1px rgba(247, 133, 0, 0.5), 0 0 5px rgba(247, 133, 0, 0.9), 0 0 1px rgba(247, 133, 0, 0.5) inset;
+  box-shadow: 0 0 5px rgba(247, 133, 0, 0.9), 0 0 1px rgba(247, 133, 0, 0.5) inset;
 }
 .filter .selectBox .select:after {
   content: "";
@@ -188,35 +188,7 @@ h3.subTitle i {
 .filter .selectBox .optionBox {
   position: absolute;
   width: 100%;
-  height: 170px;
-  overflow: auto;
-  -ms-overflow-style: none;
-  top: 62px;
-  left: 0;
-  font-weight: 700;
-  font-size: 14px;
-  margin-top: 10px;
-  border: 1px solid #F78500;
-  border-radius: 5px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  transition: 0.5s;
   z-index: 9;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 10px rgba(247, 133, 0, 0.9);
-}
-.filter .selectBox .optionBox::-webkit-scrollbar {
-  background-color: transparent;
-}
-.filter .selectBox .optionBox::-webkit-scrollbar-thumb {
-  width: px;
-  background-color: rgba(247, 133, 0, 0.5);
-  border-radius: 5px;
-}
-.filter .selectBox .optionBox.opt-hide {
-  display: none;
 }
 .filter .selectBox .optionBox:before {
   content: "";
@@ -227,23 +199,52 @@ h3.subTitle i {
   border-left: 1px solid #F78500;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
-  top: -6px;
-  right: 20px;
+  top: 5px;
+  right: 15px;
   background-color: #fff;
 }
-.filter .selectBox .optionBox .option {
+.filter .selectBox .optionBox.opt-hide {
+  display: none;
+}
+.filter .selectBox .inBox {
+  width: 100%;
+  height: 170px;
+  overflow: auto;
+  -ms-overflow-style: none;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 10px;
+  border: 1px solid #F78500;
+  border-radius: 5px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  transition: 0.5s;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 10px rgba(247, 133, 0, 0.9), 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.filter .selectBox .inBox::-webkit-scrollbar {
+  background-color: transparent;
+  width: 5px;
+}
+.filter .selectBox .inBox::-webkit-scrollbar-thumb {
+  background-color: rgba(247, 133, 0, 0.5);
+  border-radius: 5px;
+}
+.filter .selectBox .inBox .option {
   position: relative;
   padding: 8px;
   cursor: pointer;
   font-weight: 500;
 }
-.filter .selectBox .optionBox .option:first-child {
-  border-radius: 5px 5px 0 0;
+.filter .selectBox .inBox .option:first-child {
+  border-radius: 5px 0 0 0;
 }
-.filter .selectBox .optionBox .option:last-child {
-  border-radius: 0 0 5px 5px;
+.filter .selectBox .inBox .option:last-child {
+  border-radius: 0 0 0 5px;
 }
-.filter .selectBox .optionBox .option:hover {
+.filter .selectBox .inBox .option:hover {
   background-color: #F78500;
   color: white;
 }
@@ -308,6 +309,11 @@ ul.hospitalBox {
   justify-content: flex-star;
   margin: 20px 5px;
 }
+@media(max-width: 768px) {
+  ul.hospitalBox {
+    justify-content: space-around;
+  }
+}
 ul.hospitalBox li.hospital {
   width: 31.8%;
   margin: 10px 4.5px;
@@ -330,7 +336,6 @@ ul.hospitalBox li.hospital:hover .img {
 @media(max-width: 768px) {
   ul.hospitalBox li.hospital {
     width: 47.5%;
-    justify-content: center;
   }
 }
 @media(max-width: 420px) {
@@ -439,6 +444,42 @@ ul.empty .emptyData .emoticons {
   font-weight: 700;
 }
 
+ul.pages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ul.pages li.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  color: rgba(169, 169, 169, 0.8);
+  border: 0.5px solid rgba(169, 169, 169, 0.5);
+  border-left: 0.5px solid transparent;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+ul.pages li.page:first-child {
+  border-radius: 5px 0 0 5px;
+  border-left: 0.5px solid rgba(169, 169, 169, 0.5);
+}
+ul.pages li.page:last-child {
+  border-radius: 0 5px 5px 0;
+}
+ul.pages li.page:hover {
+  background-color: rgba(247, 133, 0, 0.2);
+}
+ul.pages li.page.onPage {
+  background-color: #F78500;
+  color: white;
+  font-weight: 500;
+}
+
 section#detail {
   position: fixed;
   width: 100%;
@@ -454,7 +495,7 @@ section#detail .detailBox {
   height: 100%;
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-  overflow: auto;
+  overflow-Y: scroll;
 }
 @media(max-width: 420px) {
   section#detail .detailBox {
@@ -462,28 +503,30 @@ section#detail .detailBox {
   }
 }
 section#detail .close {
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
   position: fixed;
   top: 10px;
   right: 30px;
-  font-size: 20px;
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
   cursor: pointer;
   transition: 0.3s;
+  opacity: 0.2;
+  border-radius: 5px;
 }
 section#detail .close:hover {
-  color: #F78500;
+  opacity: 0.5;
 }
 section#detail .img {
   width: 100%;
-  height: 400px;
+  height: 50vh;
   position: relative;
   background-image: url(https://mini-ghost.github.io/VetMap/images/cat-74177.jpeg);
   background-position: center;
   background-size: cover;
 }
 section#detail .content {
-  padding: 15px;
+  padding: 10px;
 }
 section#detail .content ul {
   margin: 15px 0;
@@ -548,7 +591,7 @@ section#detail .content #map {
   margin-top: 20px;
   border-radius: 5px;
   width: 100%;
-  height: 400px;
+  height: 200px;
 }
 
 .footer {

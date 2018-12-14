@@ -58,7 +58,9 @@ var AppData = {
   isOpenFilter: "全部",
   position: [],
   isposition: "",
-  vetSelect: vetSelect
+  vetSelect: vetSelect,
+  pageNum: 1,
+  pageMaxData: 12
 }
 
 var vm = new Vue({
@@ -89,16 +91,18 @@ var vm = new Vue({
     detail: function(res){
       this.vetSelect.data = res
       this.vetSelect.type = true
-      
       $("body").addClass("scrollbar-none")
-      
       detailMap()
     },
     closeDetail: function(){
-      
       vm.vetSelect.type = false
       $("body").removeClass("scrollbar-none")
-      
+    },
+    pageSelect: function(obj){
+      this.pageNum = obj
+      $("html,body").animate({
+        scrollTop: $(".vetContent").offset().top
+      },600);
     }
   },
   computed: {
@@ -120,11 +124,11 @@ var vm = new Vue({
       if(isOpen != "全部"){
         filterArry = filterArry.filter((obj)=>{return obj.isOpen === isOpen})
       }
-      
+      vm.pageNum = 1
       return filterArry.sort((a,b)=>{return a.nearest - b.nearest})
-
-      
     },
+    pageMaxData: function(){return this.pageMaxData},
+    pageNum: function(){return this.pageNum}
   }
 })
 
