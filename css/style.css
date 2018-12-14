@@ -505,17 +505,17 @@ section#detail .detailBox {
 section#detail .close {
   position: fixed;
   top: 10px;
-  right: 30px;
+  right: 10px;
   background-color: black;
   color: white;
   padding: 5px 10px;
   cursor: pointer;
   transition: 0.3s;
-  opacity: 0.2;
+  opacity: 0.4;
   border-radius: 5px;
 }
 section#detail .close:hover {
-  opacity: 0.5;
+  opacity: 0.8;
 }
 section#detail .img {
   width: 100%;
@@ -526,7 +526,7 @@ section#detail .img {
   background-size: cover;
 }
 section#detail .content {
-  padding: 10px;
+  padding: 20px;
 }
 section#detail .content ul {
   margin: 15px 0;
