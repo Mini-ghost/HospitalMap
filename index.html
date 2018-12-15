@@ -1,163 +1,119 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
-  <title>台中動物醫院地圖｜Taichung Veterinary Hospital Map</title>
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="台中動物醫院地圖｜Taichung Veterinary Hospital Map" >
-  <meta property="og:description" content="彙整台中各大動物醫院的詳細資訊，可以透過條件篩選找到您需要的動物醫院">
-  <meta property="og:url" content="https://mini-ghost.github.io/VetMap/">
-  <meta property="og:image" content="https://mini-ghost.github.io/VetMap/images/cat-74177.jpeg">
-
-  
-  <link rel='stylesheet' href='https://fonts.googleapis.com/earlyaccess/notosanstc.css'>
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css'>
-  <link rel="stylesheet" href="css/style.css">
-
-  <!-- Hotjar Tracking Code for https://mini-ghost.github.io/VetMap/ -->
-  <script>
-    (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:1112824,hjsv:6};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-        a.appendChild(r);
-    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-  </script>
-  
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130590667-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-130590667-1');
-  </script>
-
-  
-</head>
-
-<body>
-
-  
-  <div id="app">
-    <header class="header">
-      <div class="titleBox">
-        <h1 class="title">台中動物醫院地圖</h1>
-        <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung  Veterinary Hospital Map</span></h2>
-      </div>
-    </header>
-    <section id="section">
-      <div class="contender">
-        <div class="flexBox">
-          <div class="filter">
-            <div class="controlArea">
-              <h3 class="subTitle">條件篩選</h3>
-              <div class="selectBox" id="District">
-                <h4>區域選擇</h4>
-                <div class="select" @click="optionClick()">{{AppData.districtFilter}}</div>
-                <div class="optionBox opt-hide">
-                  <div class="inBox">
-                    <div class="option" @click="optionSelect('全部')">全部</div>
-                    <div class="option" v-for="Btn in AppData.District" :value="Btn.id" @click="optionSelect(Btn.name)">{{Btn.name}}</div>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>台中動物醫院地圖｜ Taichung Veterinary Hospital Map</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanstc.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <div class="titleBox">
+          <h1 class="title">台中動物醫院地圖</h1>
+          <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung 	Veterinary Hospital Map</span></h2>
+        </div>
+      </header>
+      <section id="section">
+        <div class="contender">
+          <div class="flexBox">
+            <div class="filter">
+              <div class="controlArea">
+                <h3 class="subTitle">條件篩選</h3>
+                <div class="selectBox" id="District">
+                  <h4>區域選擇</h4>
+                  <div class="select" @click="optionClick()">{{AppData.districtFilter}}</div>
+                  <div class="optionBox opt-hide">
+                    <div class="inBox">
+                      <div class="option" @click="optionSelect('全部')">全部</div>
+                      <div class="option" v-for="Btn in AppData.District" :value="Btn.id" @click="optionSelect(Btn.name)">{{Btn.name}}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="radioBox" id="pet">
-                <h4>寵物類型</h4>
-                <div class="radios">
-                  <div class="radiosBtn">
-                    <input type="radio" id="allPet" name="pet" checked="checked"/>
-                    <label for="allPet" name="pet" @click="petSelect('全部')">全部</label>
-                  </div>
-                  <div class="radiosBtn" v-for="Pet in AppData.Pets">
-                    <input type="radio" :id="Pet.id" name="pet"/>
-                    <label :for="Pet.id" name="pet" @click="petSelect(Pet.value)">{{Pet.name}}</label>
+                <div class="radioBox" id="pet">
+                  <h4>寵物類型</h4>
+                  <div class="radios">
+                    <div class="radiosBtn">
+                      <input type="radio" id="allPet" name="pet" checked="checked"/>
+                      <label for="allPet" name="pet" @click="petSelect('全部')">全部</label>
+                    </div>
+                    <div class="radiosBtn" v-for="Pet in AppData.Pets">
+                      <input type="radio" :id="Pet.id" name="pet"/>
+                      <label :for="Pet.id" name="pet" @click="petSelect(Pet.value)">{{Pet.name}}</label>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="radioBox" id="Open">
-                <h4>看診中</h4>
-                <div class="radios">
-                  <div class="radiosBtn">
-                    <input type="radio" id="allSelect" name="isOpen" checked="checked"/>
-                    <label for="allSelect" name="isOpen" @click="isOpenSlect('全部')">全部</label>
-                  </div>
-                  <div class="radiosBtn" v-for="">
-                    <input type="radio" id="nowOpen" name="isOpen"/>
-                    <label for="nowOpen" name="isOpen" @click="isOpenSlect(true)">看診中</label>
+                <div class="radioBox" id="Open">
+                  <h4>看診中</h4>
+                  <div class="radios">
+                    <div class="radiosBtn">
+                      <input type="radio" id="allSelect" name="isOpen" checked="checked"/>
+                      <label for="allSelect" name="isOpen" @click="isOpenSlect('全部')">全部</label>
+                    </div>
+                    <div class="radiosBtn" v-for="">
+                      <input type="radio" id="nowOpen" name="isOpen"/>
+                      <label for="nowOpen" name="isOpen" @click="isOpenSlect(true)">看診中</label>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="vetContent">
-            <h3 class="subTitle">動物醫院總覽<i>//依照{{(AppData.isposition)? '直線距離':'新增時間'}}排序 </i></h3>
-            <div class="contentBox">
-              <ul class="hospitalBox" id="Overview" v-if="filterData.length != 0">
-                <li class="hospital" v-for="(Data,index) in filterData" v-if="index &lt; pageMaxData*pageNum &amp;&amp; index &gt;= pageMaxData*(pageNum-1)" @click="detail(Data)">
-                  <div class="imgBox">
-                    <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
-                    <div class="district">{{Data.district}}</div>
-                  </div>
-                  <div class="content"><span class="isOpen" :class="(Data.isOpen)?'true':'false'">{{(Data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="Data._24hr">24hr</span>
-                    <h2 class="title">{{Data.name}} </h2>
-                    <ul>
-                      <li class="address"><span class="icon right fas fa-map-marker-alt"></span><span>{{Data.address}}</span></li>
-                      <li class="openTime"> <span class="icon fas fa-clock"></span><span>{{Data.time}}</span></li>
-                    </ul>
-                    <div class="pet"><span v-for="Pet in Data.pet">{{Pet}}</span></div>
-                    <div class="service"><span v-for="Ser in Data.service">{{Ser}}</span></div>
-                  </div>
+            <div class="vetContent">
+              <h3 class="subTitle">動物醫院總覽<i>//依照{{(AppData.isposition)? '直線距離':'新增時間'}}排序 </i></h3>
+              <div class="contentBox">
+                <ul class="hospitalBox" id="Overview" v-if="filterData.length != 0">
+                  <li class="hospital" v-for="(Data,index) in filterData" v-if="index &lt; pageMaxData*pageNum &amp;&amp; index &gt;= pageMaxData*(pageNum-1)" @click="detail(Data)">
+                    <div class="imgBox">
+                      <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
+                      <div class="district">{{Data.district}}</div>
+                    </div>
+                    <div class="content"><span class="isOpen" :class="(Data.isOpen)?'true':'false'">{{(Data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="Data._24hr">24hr</span>
+                      <h2 class="title">{{Data.name}} </h2>
+                      <ul>
+                        <li class="address"><span class="icon right fas fa-map-marker-alt"></span><span>{{Data.address}}</span></li>
+                        <li class="openTime"> <span class="icon fas fa-clock"></span><span>{{Data.time}}</span></li>
+                      </ul>
+                      <div class="pet"><span v-for="Pet in Data.pet">{{Pet}}</span></div>
+                      <div class="service"><span v-for="Ser in Data.service">{{Ser}}</span></div>
+                    </div>
+                  </li>
+                </ul>
+                <ul class="pages" v-show="filterData.length &gt; pageMaxData">
+                  <li class="page" v-for="page in Math.ceil(filterData.length/pageMaxData)" :class="(AppData.pageNum == page)? 'onPage':''" @click="pageSelect(page)">{{page}}</li>
+                </ul>
+              </div>
+              <ul class="empty" v-if="filterData.length == 0">
+                <li class="emptyData">
+                  <div class="emoticons">(^-^*)</div>
+                  <div class="PromptText">No veterinary hospital found!</div>
                 </li>
               </ul>
-              <ul class="pages" v-show="filterData.length &gt; pageMaxData">
-                <li class="page" v-for="page in Math.ceil(filterData.length/pageMaxData)" :class="(AppData.pageNum == page)? 'onPage':''" @click="pageSelect(page)">{{page}}</li>
-              </ul>
             </div>
-            <ul class="empty" v-if="filterData.length == 0">
-              <li class="emptyData">
-                <div class="emoticons">(^-^*)</div>
-                <div class="PromptText">No  veterinary hospital found!</div>
-              </li>
-            </ul>
           </div>
         </div>
-      </div>
-    </section>
-    <section id="detail" v-show="AppData.vetSelect.type">
-      <div class="detailBox">
-        <div class="img" :style="'background-image: url('+ AppData.vetSelect.data.outward + ')'"></div>
-        <div class="content"><span class="isOpen" :class="(AppData.vetSelect.data.isOpen)?'true':'false'">{{(AppData.vetSelect.data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="AppData.vetSelect.data._24hr">24hr</span>
-          <h2 class="title">{{AppData.vetSelect.data.name}}</h2>
-          <ul>
-            <li><span class="icon right fas fa-map-marker-alt"></span><span>{{AppData.vetSelect.data.address}}</span></li>
-            <li><span class="icon fas fa-clock"></span><span>{{AppData.vetSelect.data.time}}</span></li>
-            <li><span class="icon fas fa-phone"></span><span>{{AppData.vetSelect.data.phone}}</span></li>
-          </ul>
-          <div class="hashtag"><span class="pet" v-for="Pet in AppData.vetSelect.data.pet">{{Pet}}</span><span class="ser" v-for="Ser in AppData.vetSelect.data.service">{{Ser}}</span></div>
-          <div id="map"></div>
-        </div><span class="close fas fa-times" @click="closeDetail()"></span>
-      </div>
-    </section>
-    <footer class="footer"><a href="http://github.com/Mini-ghost/" target="_blank"> <i class="fab fa-github"></i><span>GitHub</span></a></footer>
-  </div>
-
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
-    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyASmyX9Rc19poJMP4slFBw6okH1opr9TvE&callback=initMap'></script>
-    <script  src="js/index.js"></script>
-
-
-
-
-</body>
-
-
+      </section>
+      <section id="detail" v-show="AppData.vetSelect.type">
+        <div class="detailBox">
+          <div class="img" :style="'background-image: url('+ AppData.vetSelect.data.outward + ')'"></div>
+          <div class="content"><span class="isOpen" :class="(AppData.vetSelect.data.isOpen)?'true':'false'">{{(AppData.vetSelect.data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="AppData.vetSelect.data._24hr">24hr</span>
+            <h2 class="title">{{AppData.vetSelect.data.name}}</h2>
+            <ul>
+              <li><span class="icon right fas fa-map-marker-alt"></span><span>{{AppData.vetSelect.data.address}}</span></li>
+              <li><span class="icon fas fa-clock"></span><span>{{AppData.vetSelect.data.time}}</span></li>
+              <li><span class="icon fas fa-phone"></span><span>{{AppData.vetSelect.data.phone}}</span></li>
+            </ul>
+            <div class="hashtag"><span class="pet" v-for="Pet in AppData.vetSelect.data.pet">{{Pet}}</span><span class="ser" v-for="Ser in AppData.vetSelect.data.service">{{Ser}}</span></div>
+            <div id="map"></div>
+          </div><span class="close fas fa-times" @click="closeDetail()"></span>
+        </div>
+      </section>
+      <footer class="footer"><a href="http://github.com/Mini-ghost/" target="_blank"> <i class="fab fa-github"></i><span>GitHub</span></a></footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
+    <script src="js/index.js"></script>
+  </body>
 </html>
