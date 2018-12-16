@@ -172,6 +172,7 @@ var vm = new Vue({
     closeDetail: function closeDetail() {
       vm.vetSelect.type = false;
       $("body").removeClass("scrollbar-none");
+      $('.detailBox').scrollTop(0);
     },
     pageSelect: function pageSelect(obj) {
       this.pageNum = obj;
