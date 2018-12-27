@@ -36,7 +36,7 @@
       <header class="header">
         <div class="titleBox">
           <h1 class="title">台中動物醫院地圖</h1>
-          <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung 	Veterinary Hospital Map</span></h2>
+          <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung  Veterinary Hospital Map</span></h2>
         </div>
       </header>
       <section id="section">
@@ -47,11 +47,11 @@
                 <h3 class="subTitle">條件篩選</h3>
                 <div class="selectBox" id="District">
                   <h4>區域選擇</h4>
-                  <div class="select" @click="optionClick()">{{AppData.districtFilter}}</div>
+                  <div class="select" @click="selectClick()">{{districtFilter}}</div>
                   <div class="optionBox opt-hide">
                     <div class="inBox">
-                      <div class="option" @click="optionSelect('全部')">全部</div>
-                      <div class="option" v-for="Btn in AppData.District" :value="Btn.id" @click="optionSelect(Btn.name)">{{Btn.name}}</div>
+                      <div class="option" @click="optionClick('全部')">全部</div>
+                      <div class="option" v-for="Btn in District" :value="Btn.id" @click="optionClick(Btn.name)">{{Btn.name}}</div>
                     </div>
                   </div>
                 </div>
@@ -62,7 +62,7 @@
                       <input type="radio" id="allPet" name="pet" checked="checked"/>
                       <label for="allPet" name="pet" @click="petSelect('全部')">全部</label>
                     </div>
-                    <div class="radiosBtn" v-for="Pet in AppData.Pets">
+                    <div class="radiosBtn" v-for="Pet in Pets">
                       <input type="radio" :id="Pet.id" name="pet"/>
                       <label :for="Pet.id" name="pet" @click="petSelect(Pet.value)">{{Pet.name}}</label>
                     </div>
@@ -84,10 +84,10 @@
               </div>
             </div>
             <div class="vetContent">
-              <h3 class="subTitle">動物醫院總覽<i>//依照{{(AppData.isposition)? '直線距離':'新增時間'}}排序 </i></h3>
+              <h3 class="subTitle">動物醫院總覽<i>//依照{{(canPosition)? '直線距離':'新增時間'}}排序 </i></h3>
               <div class="contentBox">
-                <ul class="hospitalBox" id="Overview" v-if="filterData.length != 0">
-                  <li class="hospital" v-for="(Data,index) in filterData" v-if="index &lt; pageMaxData*pageNum &amp;&amp; index &gt;= pageMaxData*(pageNum-1)" @click="detail(Data)">
+                <ul class="hospitalBox" id="Overview" v-if="filterData.length">
+                  <li class="hospital" v-for="(Data,index) in filterData" v-if="index &lt; dataPrePage*pageNum &amp;&amp; index &gt;= dataPrePage*(pageNum-1)" @click="detail(Data)">
                     <div class="imgBox">
                       <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
                       <div class="district">{{Data.district}}</div>
@@ -103,11 +103,11 @@
                     </div>
                   </li>
                 </ul>
-                <ul class="pages" v-show="filterData.length &gt; pageMaxData">
-                  <li class="page" v-for="page in Math.ceil(filterData.length/pageMaxData)" :class="(AppData.pageNum == page)? 'onPage':''" @click="pageSelect(page)">{{page}}</li>
+                <ul class="pages" v-if="filterData.length &gt; dataPrePage">
+                  <li class="page" v-for="page in totalPage" :class="(pageNum == page)? 'onPage':''" @click="pageSelect(page)">{{page}}</li>
                 </ul>
               </div>
-              <ul class="empty" v-if="filterData.length == 0">
+              <ul class="empty" v-if="!filterData.length">
                 <li class="emptyData">
                   <div class="emoticons">(^-^*)</div>
                   <div class="PromptText">No veterinary hospital found!</div>
@@ -117,17 +117,17 @@
           </div>
         </div>
       </section>
-      <section id="detail" v-show="AppData.vetSelect.type">
+      <section id="detail" v-show="vetSelect.type">
         <div class="detailBox">
-          <div class="img" :style="'background-image: url('+ AppData.vetSelect.data.outward + ')'"></div>
-          <div class="content"><span class="isOpen" :class="(AppData.vetSelect.data.isOpen)?'true':'false'">{{(AppData.vetSelect.data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="AppData.vetSelect.data._24hr">24hr</span>
-            <h2 class="title">{{AppData.vetSelect.data.name}}</h2>
+          <div class="img" :style="'background-image: url('+ vetSelect.data.outward + ')'"></div>
+          <div class="content"><span class="isOpen" :class="(vetSelect.data.isOpen)?'true':'false'">{{(vetSelect.data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="vetSelect.data._24hr">24hr</span>
+            <h2 class="title">{{vetSelect.data.name}}</h2>
             <ul>
-              <li><span class="icon right fas fa-map-marker-alt"></span><span>{{AppData.vetSelect.data.address}}</span></li>
-              <li><span class="icon fas fa-clock"></span><span>{{AppData.vetSelect.data.time}}</span></li>
-              <li><span class="icon fas fa-phone"></span><span>{{AppData.vetSelect.data.phone}}</span></li>
+              <li><span class="icon right fas fa-map-marker-alt"></span><span>{{vetSelect.data.address}}</span></li>
+              <li><span class="icon fas fa-clock"></span><span>{{vetSelect.data.time}}</span></li>
+              <li><span class="icon fas fa-phone"></span><span>{{vetSelect.data.phone}}</span></li>
             </ul>
-            <div class="hashtag"><span class="pet" v-for="Pet in AppData.vetSelect.data.pet">{{Pet}}</span><span class="ser" v-for="Ser in AppData.vetSelect.data.service">{{Ser}}</span></div>
+            <div class="hashtag"><span class="pet" v-for="Pet in vetSelect.data.pet">{{Pet}}</span><span class="ser" v-for="Ser in vetSelect.data.service">{{Ser}}</span></div>
             <div id="map"></div>
           </div><span class="close fas fa-times" @click="closeDetail()"></span>
         </div>
@@ -136,7 +136,7 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASmyX9Rc19poJMP4slFBw6okH1opr9TvE&amp;callback=initMap"></script>
     <script src="js/index.js"></script>
   </body>
 </html>
