@@ -1,5 +1,3 @@
-"use strict";
-
 (function($,Vue){
   const Key = "1KvTCKEUPkwf6Usl4gPGgPw5iksE6DErYnHs2zxsY2i0"
   const hospitalAPI = "https://spreadsheets.google.com/feeds/list/"+ Key +"/1/public/values?alt=json"
@@ -79,7 +77,7 @@
         this.vetData = res.feed.entry.map((obj)=>({
           name: obj.gsx$醫院名稱.$t,
           phone: obj.gsx$電話號碼.$t,
-          time: obj.gsx$營業日.$t,
+          time: obj.gsx$營業日.$t || '暫無資料',
           detialTime: obj.gsx$詳細看診時間.$t.replace(/[\u4e00-\u9fa5]{3}\s*/g,"").split("\n"),
           web: obj.gsx$網站連結.$t,
           facebook: obj.gsx$粉絲專頁連結.$t,
@@ -90,14 +88,14 @@
           _24hr: obj.gsx$是否為24h.$t !== "否",
           pet: obj.gsx$適用寵物類型.$t.split(", "),
           service: obj.gsx$服務類別.$t.split(", "),
-          outward: obj.gsx$外觀照片網址.$t,
+          outward: obj.gsx$外觀照片網址.$t || 'https://mini-ghost.github.io/VetMap/images/noImage.jpg',
         }))
 
         this.vetData.forEach((obj)=>{
 
           obj.todayRange = obj.detialTime[this.timeData]
 
-          if(obj.todayRange != undefined){
+          if(obj.todayRange !== undefined){
             obj.todayRange = obj.todayRange.split(", ")
             obj.isOpen = this.isOpen(obj.todayRange)
           }
@@ -123,7 +121,7 @@
       // 取得使用者載入時間
       getTime(){
         let week = new Date().getDay()-1;
-        if(week == -1){week = 6}
+        if(week === -1){week = 6}
         this.timeData = week
       },
 
@@ -165,13 +163,14 @@
           }
         })
         var ans = Comparison.some((obj)=>{return obj === true})
+        
         return ans? true : false
       },
 
       // Googole Map
       detailMap(){
         var mapData = this.vetSelect.data
-        var map = new google.maps.Map(document.getElementById("map"),{
+        var map = new google.maps.Map(document.querySelector('#map'),{
           center: {lat: Number(mapData.positioning[0]) ,lng: Number(mapData.positioning[1])},
           zoom: 18,
         })

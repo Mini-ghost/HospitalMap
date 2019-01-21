@@ -8,19 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanstc.css"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"/>
     <link rel="stylesheet" href="css/style.css"/>
-
-    <!-- Hotjar Tracking Code for https://mini-ghost.github.io/VetMap/ -->
-    <script>
-        (function(h,o,t,j,a,r){
-            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-            h._hjSettings={hjid:1112824,hjsv:6};
-            a=o.getElementsByTagName('head')[0];
-            r=o.createElement('script');r.async=1;
-            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-    </script>
-
+    
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130590667-1"></script>
     <script>
@@ -36,7 +24,7 @@
       <header class="header">
         <div class="titleBox">
           <h1 class="title">台中動物醫院地圖</h1>
-          <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung  Veterinary Hospital Map</span></h2>
+          <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung 	Veterinary Hospital Map</span></h2>
         </div>
       </header>
       <section id="section">
@@ -69,7 +57,7 @@
                   </div>
                 </div>
                 <div class="radioBox" id="Open">
-                  <h4>看診中</h4>
+                  <h4>看診狀態</h4>
                   <div class="radios">
                     <div class="radiosBtn">
                       <input type="radio" id="allSelect" name="isOpen" checked="checked"/>
@@ -95,7 +83,7 @@
                     <div class="content"><span class="isOpen" :class="(Data.isOpen)?'true':'false'">{{(Data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="Data._24hr">24hr</span>
                       <h2 class="title">{{Data.name}} </h2>
                       <ul>
-                        <li class="address"><span class="icon right fas fa-map-marker-alt"></span><span>{{Data.address}}</span></li>
+                        <li class="address"><span class="icon right fas fa-map-marker-alt"> </span><span>{{Data.address}}</span></li>
                         <li class="openTime"> <span class="icon fas fa-clock"></span><span>{{Data.time}}</span></li>
                       </ul>
                       <div class="pet"><span v-for="Pet in Data.pet">{{Pet}}</span></div>
@@ -119,7 +107,9 @@
       </section>
       <section id="detail" v-show="vetSelect.type">
         <div class="detailBox">
-          <div class="img" :style="'background-image: url('+ vetSelect.data.outward + ')'"></div>
+          <div class="img" :style="'background-image: url('+ vetSelect.data.outward + ')'">
+            <div class="socialLink"><a :href="vetSelect.data.facebook"><span class="fab fa-facebook-square"></span><span class="icon">facebook</span></a></div>
+          </div>
           <div class="content"><span class="isOpen" :class="(vetSelect.data.isOpen)?'true':'false'">{{(vetSelect.data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="vetSelect.data._24hr">24hr</span>
             <h2 class="title">{{vetSelect.data.name}}</h2>
             <ul>
