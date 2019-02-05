@@ -1,5 +1,5 @@
 (function($,Vue){
-  const Key = "1145h0HHgQpxVIBGLRMv2gEsZ1n1_vkhpXw49abGAz6s"
+  const Key = "1IdY2z6xE_gTHB6PhUCi2FRPCy22_4lIBgP8Lewpb6B8"
   const hospitalAPI = "https://spreadsheets.google.com/feeds/list/"+ Key +"/1/public/values?alt=json"
 
   const vetSelect = {
@@ -74,27 +74,22 @@
     methods: {
       // ajax success
       successHandler(res){
-        var _res = res.feed.entry;
-        console.log(_res)
-        for(var i = 0, l = _res.length; i<l; i++){
-          var obj = _res[i]
-          this.vetData[i] = {
-            name: obj.gsx$醫院名稱.$t,
-            phone: obj.gsx$電話號碼.$t,
-            time: obj.gsx$營業日.$t || '暫無資料',
-            detialTime: obj.gsx$詳細看診時間.$t.replace(/[\u4e00-\u9fa5]{3}\s*/g,"").split("\n") || '',
-            web: obj.gsx$網站連結.$t,
-            facebook: obj.gsx$粉絲專頁連結.$t,
-            address: obj.gsx$地址.$t,
-            positioning: obj.gsx$地址座標.$t.split(","),
-            district: obj.gsx$所在地區.$t,
-            scale: obj.gsx$醫院規模.$t,
-            _24hr: obj.gsx$是否為24h.$t !== "否",
-            pet: obj.gsx$適用寵物類型.$t.split(", "),
-            service: obj.gsx$服務類別.$t.split(", "),
-            outward: obj.gsx$外觀照片網址.$t || 'https://mini-ghost.github.io/VetMap/images/noImage.jpg',
-            }
-        }
+        this.vetData = res.feed.entry.map((obj)=>({
+          name: obj.gsx$醫院名稱.$t,
+          phone: obj.gsx$電話號碼.$t,
+          time: obj.gsx$營業日.$t || '暫無資料',
+          detialTime: obj.gsx$詳細看診時間.$t.replace(/[\u4e00-\u9fa5]{3}\s*/g,"").split("\n"),
+          web: obj.gsx$網站連結.$t,
+          facebook: obj.gsx$粉絲專頁連結.$t,
+          address: obj.gsx$地址.$t,
+          positioning: obj.gsx$地址座標.$t.split(","),
+          district: obj.gsx$所在地區.$t,
+          scale: obj.gsx$醫院規模.$t,
+          _24hr: obj.gsx$是否為24h.$t !== "否",
+          pet: obj.gsx$適用寵物類型.$t.split(", "),
+          service: obj.gsx$服務類別.$t.split(", "),
+          outward: obj.gsx$外觀照片網址.$t || 'https://mini-ghost.github.io/VetMap/images/noImage.jpg',
+        }))
 
         this.vetData.forEach((obj)=>{
 
@@ -168,29 +163,22 @@
           }
         })
         var ans = Comparison.some((obj)=>{return obj === true})
-
+        
         return ans? true : false
       },
 
       // Googole Map
-      // detailMap(){
-      //   var mapData = this.vetSelect.data
-      //   var map = new google.maps.Map(document.querySelector('#map'),{
-      //     center: {lat: Number(mapData.positioning[0]) ,lng: Number(mapData.positioning[1])},
-      //     zoom: 18,
-      //   })
+      detailMap(){
+        var mapData = this.vetSelect.data
+        var map = new google.maps.Map(document.querySelector('#map'),{
+          center: {lat: Number(mapData.positioning[0]) ,lng: Number(mapData.positioning[1])},
+          zoom: 18,
+        })
     
-      //   var marker = new google.maps.Marker({
-      //     position: {lat: Number(mapData.positioning[0]) ,lng: Number(mapData.positioning[1])},
-      //     map: map,
-      //     title: mapData.name
-      //   })
-      // },
-
-      // scrollBar
-      scrollBar(){
-        $('.detailBox').niceScroll({
-          cursorcolor: '#F78500'
+        var marker = new google.maps.Marker({
+          position: {lat: Number(mapData.positioning[0]) ,lng: Number(mapData.positioning[1])},
+          map: map,
+          title: mapData.name
         })
       },
 
@@ -208,13 +196,10 @@
 
       // 詳細模式
       detail(res){
- 
         this.vetSelect.data = res
         this.vetSelect.type = true
-        this.detailMap()
-
         $("body").addClass("scrollbar-none")
-        $('.detailBox').getNiceScroll().resize()
+        this.detailMap()
       },
 
       // 離開詳細模式
