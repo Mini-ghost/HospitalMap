@@ -458,13 +458,17 @@ section#detail {
   background-color: rgba(0, 0, 0, 0.8); }
   section#detail .detailBox {
     position: absolute;
-    right: 0;
-    width: 100%;
+    bottom: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+            transform: translateX(-50%);
+    width: 80%;
     height: 100%;
     background-color: white;
     -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    overflow-Y: scroll; }
+    overflow-y: auto; }
     @media (max-width: 420px) {
       section#detail .detailBox {
         width: 100%; } }
@@ -564,7 +568,7 @@ section#detail {
       margin-top: 20px;
       border-radius: 5px;
       width: 100%;
-      max-width: 768px;
+      max-width: 1200px;
       height: 50vh;
       margin: 0 auto; }
 

@@ -1,5 +1,5 @@
 (function($,Vue){
-  const Key = "1145h0HHgQpxVIBGLRMv2gEsZ1n1_vkhpXw49abGAz6s"
+  const Key = "1B1eNzcuoSqxskYxoHynO3EOj49Pchjg_8RkyjjcQIMo"
   const hospitalAPI = "https://spreadsheets.google.com/feeds/list/"+ Key +"/1/public/values?alt=json"
 
   const vetSelect = {
@@ -74,27 +74,33 @@
     methods: {
       // ajax success
       successHandler(res){
-        var _res = res.feed.entry;
-        console.log(_res)
-        for(var i = 0, l = _res.length; i<l; i++){
-          var obj = _res[i]
-          this.vetData[i] = {
-            name: obj.gsx$醫院名稱.$t,
-            phone: obj.gsx$電話號碼.$t,
-            time: obj.gsx$營業日.$t || '暫無資料',
-            detialTime: obj.gsx$詳細看診時間.$t.replace(/[\u4e00-\u9fa5]{3}\s*/g,"").split("\n") || '',
-            web: obj.gsx$網站連結.$t,
-            facebook: obj.gsx$粉絲專頁連結.$t,
-            address: obj.gsx$地址.$t,
-            positioning: obj.gsx$地址座標.$t.split(","),
-            district: obj.gsx$所在地區.$t,
-            scale: obj.gsx$醫院規模.$t,
-            _24hr: obj.gsx$是否為24h.$t !== "否",
-            pet: obj.gsx$適用寵物類型.$t.split(", "),
-            service: obj.gsx$服務類別.$t.split(", "),
-            outward: obj.gsx$外觀照片網址.$t || 'https://mini-ghost.github.io/VetMap/images/noImage.jpg',
-            }
-        }
+        console.log(res.feed.entry)
+        this.vetData = res.feed.entry.map((obj)=>({
+          name: obj.gsx$醫院名稱.$t,
+          phone: obj.gsx$電話號碼.$t,
+          time: obj.gsx$營業日.$t,
+          detialTime: [
+            obj.gsx$週一看診時間.$t,
+            obj.gsx$週二看診時間.$t,
+            obj.gsx$週三看診時間.$t,
+            obj.gsx$週四看診時間.$t,
+            obj.gsx$週五看診時間.$t,
+            obj.gsx$週六看診時間.$t,
+            obj.gsx$週日看診時間.$t
+          ],
+          // detialTime: obj.gsx$詳細看診時間.$t.replace(/[\u4e00-\u9fa5]{3}\s*/g,"").split("\n"),
+          web: obj.gsx$網站網址.$t,
+          facebook: obj.gsx$粉絲專頁網址.$t,
+          address: obj.gsx$地址.$t,
+          positioning: obj.gsx$座標.$t.split(","),
+          district: obj.gsx$地區.$t,
+          // scale: obj.gsx$醫院規模.$t,
+          _24hr: obj.gsx$是否為24h.$t !== "否",
+          pet: obj.gsx$適用寵物類型.$t.split(", "),
+          service: obj.gsx$服務類別.$t.split(", "),
+          outward: obj.gsx$外觀照片網址.$t,
+        }))
+
 
         this.vetData.forEach((obj)=>{
 
