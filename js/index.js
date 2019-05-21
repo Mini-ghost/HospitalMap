@@ -1,4 +1,10 @@
 (function ($, Vue) {
+
+    Vue.component('vetCard', {
+        template: '#vetCard',
+        props: ['vetData']
+    })
+
     var vm = new Vue({
         el: '#app',
         data () {
@@ -204,7 +210,8 @@
                 var dom = e.currentTarget
                 var group = dom.parentNode
                 var $group = $(group)
-                this.districtText = this.districtFilter = data
+                this.districtText = data
+                this.districtFilter = (data === '全部地區')? '' : data
                 $group.slideUp(500)
             },
             // 打開導覽列
@@ -250,11 +257,6 @@
             },
         }
     
-    })
-
-    Vue.component('lightBox', {
-        template: '#lightBox',
-        // prop: [lightBoxData]
     })
 
 })($, Vue)
