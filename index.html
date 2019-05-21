@@ -76,7 +76,28 @@
             <div class="content">
               <div class="vetCard">
                 <div class="vetCard-item" v-for="vet in pageContentData" @click="lightBoxHandler(vet)">
-                  <div class="vetCard-container" v-bind:vetData="vet"></div>
+                  <div class="vetCard-header">
+                    <div class="vetCard-image" :style="vet.outward? 'background-image: url('+ vet.outward + ')' : ''"></div>
+                    <div class="vetCard-district fz-18 c-white">{{vet.district}}</div>
+                  </div>
+                  <div class="vetCard-content">
+                    <div class="vetCard-status fz-12"><span class="vetCard-status__item vetCard-status__item--greenEmpty" v-if="vet.is24hr">24hr</span>
+                      <sapn class="vetCard-status__item" :class="(vet.isOpen)? 'vetCard-status__item--green' : 'vetCard-status__item--gray'">{{(vet.isOpen)? '看診中':'休息中'}}</sapn>
+                    </div>
+                    <div class="vetCard-title">
+                      <h3 class="vetCard-title__ch fz-20">{{vet.name}}</h3>
+                    </div>
+                    <ul class="vetCard-information fz-12 c-gray">
+                      <li class="vetCard-information__item">{{vet.address}}</li>
+                      <li class="vetCard-information__item">{{vet.time}}</li>
+                    </ul>
+                    <ul class="vetCard-hashtag vetCard-hashtag--orange fz-14">
+                      <li class="vetCard-hashtag__item" v-for="pet in vet.pet">{{pet}}</li>
+                    </ul>
+                    <ul class="vetCard-hashtag vetCard-hashtag--blue fz-14">
+                      <li class="vetCard-hashtag__item" v-for="service in vet.service">{{service}}</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
               <div class="page">
@@ -126,32 +147,6 @@
             </section>
           </div>
         </article>
-        <template id="vetCard">
-          <div class="vetCard-container">
-            <div class="vetCard-header">
-              <div class="vetCard-image" :style="vetData.outward? 'background-image: url('+ vetData.outward + ')' : ''"></div>
-              <div class="vetCard-district fz-18 c-white">{{vetData.district}}</div>
-            </div>
-            <div class="vetCard-content">
-              <div class="vetCard-status fz-12"><span class="vetCard-status__item vetCard-status__item--greenEmpty" v-if="vetData.is24hr">24hr</span>
-                <sapn class="vetCard-status__item" :class="(vetData.isOpen)? 'vetCard-status__item--green' : 'vetCard-status__item--gray'">{{(vetData.isOpen)? '看診中':'休息中'}}</sapn>
-              </div>
-              <div class="vetCard-title">
-                <h3 class="vetCard-title__ch fz-20">{{vetData.name}}</h3>
-              </div>
-              <ul class="vetCard-information fz-12 c-gray">
-                <li class="vetCard-information__item">{{vetData.address}}</li>
-                <li class="vetCard-information__item">{{vetData.time}}</li>
-              </ul>
-              <ul class="vetCard-hashtag vetCard-hashtag--orange fz-14">
-                <li class="vetCard-hashtag__item" v-for="pet in vetData.pet">{{pet}}</li>
-              </ul>
-              <ul class="vetCard-hashtag vetCard-hashtag--blue fz-14">
-                <li class="vetCard-hashtag__item" v-for="service in vetData.service">{{service}}</li>
-              </ul>
-            </div>
-          </div>
-        </template>
       </main>
       <footer></footer>
     </div>

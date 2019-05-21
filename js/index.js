@@ -1,10 +1,4 @@
 (function ($, Vue) {
-
-    Vue.component('vetCard', {
-        template: '#vetCard',
-        props: ['vetData']
-    })
-
     var vm = new Vue({
         el: '#app',
         data () {
