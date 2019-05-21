@@ -7,119 +7,151 @@
     <title>台中動物醫院地圖｜ Taichung Veterinary Hospital Map</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanstc.css"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"/>
-    <link rel="stylesheet" href="css/style.css"/><!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-130590667-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'UA-130590667-1');
-</script>
+    <link rel="stylesheet" href="css/style.css"/>
   </head>
   <body>
     <div id="app">
+      <nav class="nav" v-show="navType" @click.self="openNavHandler()">
+        <div class="nav__colse" @click.stop.self="openNavHandler()">CLOSE</div>
+        <div class="nav-container">
+          <div class="nav-title title">
+            <div class="nav-title__ch title__ch fz-36">條件篩選</div>
+          </div>
+          <div class="nav-filter">
+            <div class="nav-filter__group">
+              <div class="nav-filter__title">地區條件</div>
+              <div class="select" @click="selectHandler($event)">
+                <div class="select__text">{{districtText}}</div>
+                <ul class="select__group" style="display: none">
+                  <li class="select__option" @click.stop="optionHandler($event, '全部地區')">全部地區</li>
+                  <li class="select__option" @click.stop="optionHandler($event, district.name)" v-for="district in districts">{{district.name}}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="nav-filter__group">
+              <div class="nav-filter__title">寵物種類選擇</div>
+              <div class="radio">
+                <label class="radio-label">
+                  <input class="radio-input" type="radio" name="pet" value="全選" @click="patFilerHandler('')" checked="checked"/>
+                  <div class="radio-text">全選 All</div>
+                </label>
+                <label class="radio-label" v-for="pet in pets">
+                  <input class="radio-input" type="radio" name="pet" :value="pet.value" @click="patFilerHandler(pet.value)"/>
+                  <div class="radio-text">{{pet.name}} {{pet.id}}</div>
+                </label>
+              </div>
+            </div>
+            <div class="nav-filter__group">
+              <div class="nav-filter__title">看診狀態</div>
+              <div class="radio">
+                <label class="radio-label">
+                  <input class="radio-input" type="radio" name="open" value="全選" @click="isOpenFilterHandler(false)" checked="checked"/>
+                  <div class="radio-text">全選 All</div>
+                </label>
+                <label class="radio-label">
+                  <input class="radio-input" type="radio" name="open" @click="isOpenFilterHandler(true)" value="看診中"/>
+                  <div class="radio-text">看診中 All</div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
       <header class="header">
-        <div class="titleBox">
-          <h1 class="title">台中動物醫院地圖</h1>
-          <h2> <span class="icon fas fa-map-marker-alt"></span><span class="subTitle">Taichung 	Veterinary Hospital Map</span></h2>
+        <div class="header-banner" style="background-image: url(image/banner_02.jpg)"></div>
+        <div class="header-content">
+          <div class="header-title header-title--bottom-left">
+            <h1 class="header-title__ch fz-52 c-white">台中動物醫院地圖</h1>
+            <p class="header-title__en c-white">Taichung Veterinary Hospital Map</p>
+          </div>
         </div>
       </header>
-      <section id="section">
-        <div class="contender">
-          <div class="flexBox">
-            <div class="filter">
-              <div class="controlArea">
-                <h3 class="subTitle">條件篩選</h3>
-                <div class="selectBox" id="District">
-                  <h4>區域選擇</h4>
-                  <div class="select" @click="selectClick()">{{districtFilter}}</div>
-                  <div class="optionBox opt-hide">
-                    <div class="inBox">
-                      <div class="option" @click="optionClick('全部')">全部</div>
-                      <div class="option" v-for="Btn in District" :value="Btn.id" @click="optionClick(Btn.name)">{{Btn.name}}</div>
+      <main>
+        <section>
+          <div class="container">
+            <div class="title">
+              <h2 class="title__ch fz-36">台中動物醫院總覽</h2>
+              <p class="title__description">目前共收錄了全台中市 {{vetData.length}} 間動物醫院的資訊</p>
+            </div>
+            <div class="content">
+              <div class="vetCard">
+                <div class="vetCard-item" v-for="vet in pageContentData" @click="lightBoxHandler(vet)">
+                  <div class="vetCard-header">
+                    <div class="vetCard-image" :style="vet.outward? 'background-image: url('+ vet.outward + ')' : ''"></div>
+                    <div class="vetCard-district fz-18 c-white">{{vet.district}}</div>
+                  </div>
+                  <div class="vetCard-content">
+                    <div class="vetCard-status fz-12"><span class="vetCard-status__item vetCard-status__item--greenEmpty" v-if="vet.is24hr">24hr</span>
+                      <sapn class="vetCard-status__item" :class="(vet.isOpen)? 'vetCard-status__item--green' : 'vetCard-status__item--gray'">{{(vet.isOpen)? '看診中':'休息中'}}</sapn>
                     </div>
+                    <div class="vetCard-title">
+                      <h3 class="vetCard-title__ch fz-20">{{vet.name}}</h3>
+                    </div>
+                    <ul class="vetCard-information fz-12 c-gray">
+                      <li class="vetCard-information__item">{{vet.address}}</li>
+                      <li class="vetCard-information__item">{{vet.time}}</li>
+                    </ul>
+                    <ul class="vetCard-hashtag vetCard-hashtag--orange fz-14">
+                      <li class="vetCard-hashtag__item" v-for="pet in vet.pet">{{pet}}</li>
+                    </ul>
+                    <ul class="vetCard-hashtag vetCard-hashtag--blue fz-14">
+                      <li class="vetCard-hashtag__item" v-for="service in vet.service">{{service}}</li>
+                    </ul>
                   </div>
                 </div>
-                <div class="radioBox" id="pet">
-                  <h4>寵物類型</h4>
-                  <div class="radios">
-                    <div class="radiosBtn">
-                      <input type="radio" id="allPet" name="pet" checked="checked"/>
-                      <label for="allPet" name="pet" @click="petSelect('全部')">全部</label>
-                    </div>
-                    <div class="radiosBtn" v-for="Pet in Pets">
-                      <input type="radio" :id="Pet.id" name="pet"/>
-                      <label :for="Pet.id" name="pet" @click="petSelect(Pet.value)">{{Pet.name}}</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="radioBox" id="Open">
-                  <h4>看診狀態</h4>
-                  <div class="radios">
-                    <div class="radiosBtn">
-                      <input type="radio" id="allSelect" name="isOpen" checked="checked"/>
-                      <label for="allSelect" name="isOpen" @click="isOpenSlect('全部')">全部</label>
-                    </div>
-                    <div class="radiosBtn" v-for="">
-                      <input type="radio" id="nowOpen" name="isOpen"/>
-                      <label for="nowOpen" name="isOpen" @click="isOpenSlect(true)">看診中</label>
-                    </div>
-                  </div>
-                </div>
+              </div>
+              <div class="page">
+                <div class="page__item fz-14" v-for="page in pageTotal" :class=" (page === pageDataNow)? 'page__item--active': ''" @click="pageSelectHandler(page)">{{page}}</div>
               </div>
             </div>
-            <div class="vetContent">
-              <h3 class="subTitle">動物醫院總覽<i>//依照{{(canPosition)? '直線距離':'新增時間'}}排序 </i></h3>
-              <div class="contentBox">
-                <ul class="hospitalBox" id="Overview" v-if="filterData.length">
-                  <li class="hospital" v-for="(Data,index) in filterData" v-if="index &lt; dataPrePage*pageNum &amp;&amp; index &gt;= dataPrePage*(pageNum-1)" @click="detail(Data)">
-                    <div class="imgBox">
-                      <div class="img" :style="'background-image: url('+ Data.outward + ')'"></div>
-                      <div class="district">{{Data.district}}</div>
-                    </div>
-                    <div class="content"><span class="isOpen" :class="(Data.isOpen)?'true':'false'">{{(Data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="Data._24hr">24hr</span>
-                      <h2 class="title">{{Data.name}} </h2>
-                      <ul>
-                        <li class="address"><span class="icon right fas fa-map-marker-alt"> </span><span>{{Data.address}}</span></li>
-                        <li class="openTime"> <span class="icon fas fa-clock"></span><span>{{Data.time}}</span></li>
-                      </ul>
-                      <div class="pet"><span v-for="Pet in Data.pet">{{Pet}}</span></div>
-                      <div class="service"><span v-for="Ser in Data.service">{{Ser}}</span></div>
-                    </div>
-                  </li>
-                </ul>
-                <ul class="pages" v-if="filterData.length &gt; dataPrePage">
-                  <li class="page" v-for="page in totalPage" :class="(pageNum == page)? 'onPage':''" @click="pageSelect(page)">{{page}}</li>
-                </ul>
+          </div>
+        </section>
+        <div class="menu-btn fz-14" @click="openNavHandler"><i class="fas fa-filter"></i></div>
+      </main>
+      <lightBox v-bind:lightBoxData="lightBoxData"></lightBox>
+      <template id="lightBox">
+        <article class="lightBox" v-if="lightBoxType" @click.self="closeLightBoxHandler">
+          <div class="lightBox-container">
+            <nav class="lightBox-nav" :style="'right:' + scrollBarWidth + 'px; max-width:' + (1200-scrollBarWidth) + 'px;'">
+              <div class="lightBox-nav__close" @click.self="closeLightBoxHandler">CLOSE</div>
+            </nav>
+            <header class="lightBox-header">
+              <div class="title lightBox-title">
+                <h2 class="title__ch lightBox-title__ch fz-36">{{lightBoxData.name}}</h2>
+                <div class="title__description">
+                  <div class="vetCard-status fz-12"><span class="vetCard-status__item vetCard-status__item--greenEmpty" v-if="lightBoxData.is24hr">24hr</span>
+                    <sapn class="vetCard-status__item" :class="(lightBoxData.isOpen)? 'vetCard-status__item--green' : 'vetCard-status__item--gray'">{{(lightBoxData.isOpen)? '看診中':'休息中'}}</sapn><span class="ml-10">今日看診時間：{{lightBoxData.todayData.join('　')}}</span>
+                  </div>
+                </div>
               </div>
-              <ul class="empty" v-if="!filterData.length">
-                <li class="emptyData">
-                  <div class="emoticons">(^-^*)</div>
-                  <div class="PromptText">No veterinary hospital found!</div>
+              <div class="lightBox-banner">
+                <div class="lightBox-banner__img" :style="'background-image: url('+ lightBoxData.outward +')'"></div>
+              </div>
+            </header>
+            <section class="lightBox-content">
+              <ul class="vetCard-information"></ul>
+              <h3 class="lightBox-title">
+                <div class="lightBox-title__ch fz-20">醫院地址</div>
+                <p class="lightBox__p">地址： {{lightBoxData.address}}</p>
+              </h3>
+            </section>
+            <section class="lightBox-content">
+              <h3 class="lightBox-title">
+                <div class="lightBox-title__ch fz-20">看診時間</div>
+              </h3>
+              <ul class="lightBox-table">
+                <li class="lightBox-table__item lightBox-table__item--flex" v-for=" (days,index) in lightBoxData.detailTime" :class="(index === today)? 'lightBox-table__item--active': ''"> 
+                  <div class="lightBox-table__title">星期{{weekArray[index]}} </div>
+                  <div class="lightBox-table__content">
+                    <div class="lightBox-table__text" v-for="day in days.split(', ')"> {{day}}</div>
+                  </div>
                 </li>
               </ul>
-            </div>
+            </section>
           </div>
-        </div>
-      </section>
-      <section id="detail" v-show="vetSelect.type">
-        <div class="detailBox">
-          <div class="img" :style="'background-image: url('+ vetSelect.data.outward + ')'">
-            <div class="socialLink"><a :href="vetSelect.data.facebook"><span class="fab fa-facebook-square"></span><span class="icon">facebook</span></a></div>
-          </div>
-          <div class="content"><span class="isOpen" :class="(vetSelect.data.isOpen)?'true':'false'">{{(vetSelect.data.isOpen)? '看診中':'休息中'}}</span><span class="_24hr" v-if="vetSelect.data._24hr">24hr</span>
-            <h2 class="title">{{vetSelect.data.name}}</h2>
-            <ul>
-              <li><span class="icon right fas fa-map-marker-alt"></span><span>{{vetSelect.data.address}}</span></li>
-              <li><span class="icon fas fa-clock"></span><span>{{vetSelect.data.time}}</span></li>
-              <li><span class="icon fas fa-phone"></span><span>{{vetSelect.data.phone}}</span></li>
-            </ul>
-            <div class="hashtag"><span class="pet" v-for="Pet in vetSelect.data.pet">{{Pet}}</span><span class="ser" v-for="Ser in vetSelect.data.service">{{Ser}}</span></div>
-            <div id="map"></div>
-          </div><span class="close fas fa-times" @click="closeDetail()"></span>
-        </div>
-      </section>
-      <footer class="footer"><a href="http://github.com/Mini-ghost/" target="_blank"> <i class="fab fa-github"></i><span>GitHub</span></a></footer>
+        </article>
+      </template>
+      <footer></footer>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js"></script>
