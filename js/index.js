@@ -219,7 +219,8 @@
                 var group = dom.parentNode
                 var $group = $(group)
                 this.districtText = data
-                this.districtFilter = (data === '全部地區')? '' : data
+                this.districtFilter = (data === '全部地區') ? '' : data
+                this.pageDataNow = 1
                 $group.slideUp(500)
             },
             // 打開導覽列
@@ -234,6 +235,7 @@
             },
             isOpenFilterHandler(data) {
                 this.isOpenFilter = data
+                this.pageDataNow = 1
             },
             // google Map API
             getGoogleMapHandler(data) {
