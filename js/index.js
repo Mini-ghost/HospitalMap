@@ -171,6 +171,11 @@
                 this.lightBoxType = true
                 this.lightBoxData = data
                 this.bodyLockHandler()
+
+                // 渲染完畢後呼叫
+                this.$nextTick(function () {
+                    this.getGoogleMapHandler(data.positioning)
+                })
             },
             pageSelectHandler(data) {
                 this.pageDataNow = data
@@ -220,6 +225,16 @@
             },
             isOpenFilterHandler(data) {
                 this.isOpenFilter = data
+            },
+            getGoogleMapHandler(data) {
+                var mapDom = document.getElementById('google-map')
+                var map = new google.maps.Map(mapDom, {
+                    center: {
+                        lat: data.lat,
+                        lng: data.lng
+                    },
+                    zoom: 15
+                })
             }
         },
         computed: {

@@ -125,7 +125,7 @@
                 <h2 class="title__ch lightBox-title__ch fz-36">{{lightBoxData.name}}</h2>
                 <div class="title__description">
                   <div class="vetCard-status fz-12"><span class="vetCard-status__item vetCard-status__item--greenEmpty" v-if="lightBoxData.is24hr">24hr</span>
-                    <sapn class="vetCard-status__item" :class="(lightBoxData.isOpen)? 'vetCard-status__item--green' : 'vetCard-status__item--gray'">{{(lightBoxData.isOpen)? '看診中':'休息中'}}</sapn><span class="ml-10">今日看診時間：{{lightBoxData.todayData.join('　')}}</span>
+                    <sapn class="vetCard-status__item" :class="(lightBoxData.isOpen)? 'vetCard-status__item--green' : 'vetCard-status__item--gray'">{{(lightBoxData.isOpen)? '看診中':'休息中'}}</sapn><span class="ml-10">今日看診時間：{{lightBoxData.todayData? lightBoxData.todayData.join('　') : ''}}</span>
                   </div>
                 </div>
               </div>
@@ -153,6 +153,9 @@
                 </li>
               </ul>
             </section>
+            <section class="lightBox-content">
+              <div id="google-map"></div>
+            </section>
           </div>
         </article>
       </main>
@@ -160,6 +163,7 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+    <script async="async" defer="defer" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyASmyX9Rc19poJMP4slFBw6okH1opr9TvE&amp;amp;language=en&amp;amp;callback=initMap"></script>
     <script src="js/index.js"></script>
   </body>
 </html>
