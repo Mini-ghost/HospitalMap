@@ -129,11 +129,13 @@
                     )
                 })
             },
+            // 取得今天星期幾
             getTodayDay() {
                 var week = new Date().getDay() - 1;
                 if (week === -1) week = 6
                 this.today = week
             },
+            // 是否看診中判斷
             isOpenHandler(data) {
 
                 var comparison = new Array
@@ -159,14 +161,17 @@
                 return comparison.some(obj => { return obj === true })
 
             },
+            // 關閉燈箱
             closeLightBoxHandler(e) {
                 if (!this.bodyType) return
                 if (e.keyCode === 27 || e.type === 'click') {
                     this.lightBoxType = false
+                    this.navType = false
                     this.lightBoxData = new Object
                     this.bodyLockHandler()
                 }
             },
+            // 打開詳細燈箱
             lightBoxHandler(data) {
                 this.lightBoxType = true
                 this.lightBoxData = data
@@ -177,12 +182,14 @@
                     this.getGoogleMapHandler(data.positioning)
                 })
             },
+            // 分頁篩選
             pageSelectHandler(data) {
                 this.pageDataNow = data
                 this.$animate.animate({
                     scrollTop: $('section').offset().top
                 }, 500)
             },
+            // 固定 body
             bodyLockHandler() {
                 var body = document.body;
                 var html = document.documentElement;
@@ -199,12 +206,14 @@
                 body.style.top = distance + 'px'
                 body.style.position = 'fixed'
             },
+            // 下拉選單展開
             selectHandler(e) {
                 var dom = e.currentTarget
                 var group = dom.querySelector('.select__group')
                 var $group = $(group)
                 $group.slideToggle(500)
             },
+            // 下拉選單選項選擇
             optionHandler(e, data) {
                 var dom = e.currentTarget
                 var group = dom.parentNode
@@ -226,6 +235,7 @@
             isOpenFilterHandler(data) {
                 this.isOpenFilter = data
             },
+            // google Map API
             getGoogleMapHandler(data) {
                 var mapDom = document.getElementById('google-map')
                 var map = new google.maps.Map(mapDom, {
@@ -273,8 +283,3 @@
     })
 
 })($, Vue)
-
-
-
-
-

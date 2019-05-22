@@ -68,6 +68,7 @@ table {
   background-color: rgba(0, 0, 0, .75);
   width: 100%;
   z-index: 999;
+  -webkit-overflow-scrolling: touch;
 }
 
 .select, .select__group, .radio-label {
@@ -288,6 +289,8 @@ html {
   position: fixed;
   top: 0;
   left: calc(100% - 768px);
+  -webkit-overflow-scrolling: auto;
+  z-index: 1;
 }
 
 @media (max-width: 767.98px) {
@@ -664,6 +667,7 @@ html {
   text-align: right;
   background-color: white;
   z-index: 1;
+  -webkit-overflow-scrolling: auto;
 }
 
 .lightBox-banner {
