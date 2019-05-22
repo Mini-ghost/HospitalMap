@@ -230,8 +230,8 @@
                 var mapDom = document.getElementById('google-map')
                 var map = new google.maps.Map(mapDom, {
                     center: {
-                        lat: data[0],
-                        lng: data[1]
+                        lat: parseInt(data[0]),
+                        lng: parseInt(data[1])
                     },
                     zoom: 15
                 })
