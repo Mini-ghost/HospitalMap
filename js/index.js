@@ -230,10 +230,14 @@
                 var mapDom = document.getElementById('google-map')
                 var map = new google.maps.Map(mapDom, {
                     center: {
-                        lat: parseInt(data[0]),
-                        lng: parseInt(data[1])
+                        lat: parseFloat(data[0]),
+                        lng: parseFloat(data[1])
                     },
-                    zoom: 15
+                    zoom: 18
+                })
+                var marker = new google.maps.Marker({
+                    position: { lat: parseFloat(data[0]), lng: parseFloat(data[1]) },
+                    map: map,
                 })
             }
         },
