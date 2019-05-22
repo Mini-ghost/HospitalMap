@@ -64,7 +64,7 @@
             
             this.position = await this.getPositioning()
             this.getTodayDay()
-            this.$html = $('html')
+            this.$animate = $('html, body')
             
             $.ajax({
                 url: url,
@@ -179,7 +179,7 @@
             },
             pageSelectHandler(data) {
                 this.pageDataNow = data
-                this.$html.animate({
+                this.$animate.animate({
                     scrollTop: $('section').offset().top
                 }, 500)
             },
