@@ -59,7 +59,7 @@ table {
   background-position: center;
 }
 
-.nav, .lightBox {
+.nav, .loader, .lightBox {
   position: fixed;
   top: 0;
   left: 0;
@@ -87,7 +87,7 @@ table {
   align-items: center;
   width: 100px;
   height: 60px;
-  background-color: #cc8400;
+  background-color: #e98b2a;
   color: white;
   cursor: pointer;
 }
@@ -108,6 +108,10 @@ table {
 *, *:before, *:after {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+[v-cloak] {
+  display: none;
 }
 
 .fz-52 {
@@ -187,6 +191,7 @@ html {
   -ms-user-select: none;
   user-select: none;
   position: absolute;
+  overflow: hidden;
 }
 
 .header-title__ch {
@@ -436,6 +441,38 @@ html {
 .menu-btn:hover {
   opacity: 1;
   background-color: white;
+}
+
+.loader {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #efefef;
+}
+
+.loader-container {
+  width: 40%;
+  font-size: 0;
+}
+
+.loader-img {
+  display: inline-block;
+  vertical-align: middle;
+  width: 80%;
+}
+
+.loader-percentage {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+  width: 20%;
 }
 
 .vetCard {

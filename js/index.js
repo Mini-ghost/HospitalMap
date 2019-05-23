@@ -1,4 +1,14 @@
-(function ($, Vue) {
+; (function () {
+
+    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame
+
+    window.requestAnimationFrame = requestAnimationFrame;
+    window.cancelAnimationFrame = cancelAnimationFrame;
+
+})()
+    
+; (function ($, Vue) {
     var vm = new Vue({
         el: '#app',
         data () {
@@ -43,6 +53,9 @@
 
                 weekArray: ['一', '二', '三', '四', '五', '六', '日'],
 
+                initValue: 0,
+
+
                 pageDataQuantity: 12,
                 pageDataNow: 1,
 
@@ -58,11 +71,15 @@
             }
         },
         async mounted() {
-
+            
             var key = '1B1eNzcuoSqxskYxoHynO3EOj49Pchjg_8RkyjjcQIMo',
-                url = `https://spreadsheets.google.com/feeds/list/${key}/1/public/values?alt=json`
+                url = `https://spreadsheets.google.com/feeds/list/${key}/1/public/values?alt=json`;
             
             this.position = await this.getPositioning()
+            this.loader = document.querySelector('.loader')
+            this.loaderValue = this.loader.querySelector('.loader-percentage__value')
+            this.bodyLockHandler()
+            this.upLoadValue()
             this.getTodayDay()
             this.$animate = $('html, body')
             
@@ -74,6 +91,19 @@
             window.addEventListener('keyup',this.closeLightBoxHandler)
         },
         methods: {
+            upLoadValue() {
+                if (this.initValue > 100) {
+                    var $loader = $(this.loader)
+                    $loader.delay(400).fadeOut(400,() => {
+                        $loader.remove()
+                        this.bodyLockHandler()
+                    })
+                    return
+                }
+                this.loaderValue.innerText = `${this.initValue}%`
+                this.initValue += 1
+                requestAnimationFrame(this.upLoadValue)
+            },
             // AJAX 載入
             ajaxSuccessHandler(res) {
                 this.ajaxData = res

@@ -18,7 +18,15 @@
     </script>
   </head>
   <body>
-    <div id="app">
+    <div id="app" v-cloak="v-cloak">
+      <div class="loader">
+        <div class="loader-container">
+          <div class="loader-img"><img src="image/logo.svg"/></div>
+          <div class="loader-percentage">
+            <div class="loader-percentage__value fz-36"></div>
+          </div>
+        </div>
+      </div>
       <nav class="nav" v-show="navType" @click.self="openNavHandler()">
         <div class="nav__colse" @click.stop.self="openNavHandler()">CLOSE</div>
         <div class="nav-container">
@@ -58,7 +66,7 @@
                 </label>
                 <label class="radio-label">
                   <input class="radio-input" type="radio" name="open" @click="isOpenFilterHandler(true)" value="看診中"/>
-                  <div class="radio-text">看診中 Open</div>
+                  <div class="radio-text">看診中 Open      </div>
                 </label>
               </div>
             </div>
@@ -154,7 +162,7 @@
               </ul>
             </section>
             <section class="lightBox-content">
-              <div id="google-map"></div>
+              <div id="google-map">                   </div>
             </section>
           </div>
         </article>
