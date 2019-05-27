@@ -100,8 +100,8 @@
                     })
                     return
                 }
-                this.loaderValue.innerText = `${this.initValue}%`
-                this.initValue += 1
+                this.loaderValue.innerText = `${this.initValue} %`;
+                this.initValue += 1;
                 requestAnimationFrame(this.upLoadValue)
             },
             // AJAX 載入
