@@ -1,15 +1,17 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
+import { config } from 'vuex-module-decorators'
+import { initializeStores, modules } from '@/store/accessor'
 
 Vue.use(Vuex)
+config.rawError = true
 
-export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+const initializer = (store: Store<unknown>) => initializeStores(store)
+
+export const plugins = [initializer]
+export * from '@/store/accessor'
+
+export default new Store({
+  plugins,
+  modules
 })
