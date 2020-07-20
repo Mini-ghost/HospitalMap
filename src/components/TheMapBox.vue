@@ -217,7 +217,7 @@ export default class TheMapBox extends Vue {
    */
   private _clickBuffer (fn: Function, sec = 160) {
     return (...arg: unknown[]) => {
-      const timer = setTimeout(() => fn(arg), sec)
+      const timer = setTimeout(() => fn(...arg), sec)
       this._map.on('dblclick', () => {
         clearTimeout(timer)
       })
