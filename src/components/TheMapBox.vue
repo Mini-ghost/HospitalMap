@@ -41,7 +41,10 @@ export default class TheMapBox extends Vue {
   mapAddEventListener (): void {
     this._map
       .on('load', this.onLoad)
-      .on('click', this.onClick)
+      .on('click', this.onClickVet)
+      .on('click', USER_NAME , this.onClickUser)
+      .on('mouseenter', USER_NAME, this.onMouseEnterLayer)
+      .on('mouseleave', USER_NAME, this.onMouseLeaveLayer)
       .on('mouseenter', POINT_NAME, this.onMouseEnterLayer)
       .on('mouseleave', POINT_NAME, this.onMouseLeaveLayer)
   }
@@ -81,7 +84,7 @@ export default class TheMapBox extends Vue {
     })
   }
 
-  onClick ({ point }: mapboxgl.MapMouseEvent): void {
+  onClickVet ({ point }: mapboxgl.MapMouseEvent): void {
     const features =
       this._map.queryRenderedFeatures(point, { layers: [POINT_NAME] })
 
@@ -106,6 +109,18 @@ export default class TheMapBox extends Vue {
     }
 
     vetModule.SET_VET_DETAIL()
+  }
+
+  onClickUser ({ point }: mapboxgl.MapMouseEvent): void {
+    const [feature] =
+      this._map.queryRenderedFeatures(point, { layers: [USER_NAME] })
+
+    if(feature.geometry.type !== 'Point') return
+    this._map.flyTo({
+      center: feature.geometry.coordinates as [number, number],
+      duration: 500,
+      zoom: 14
+    })
   }
 
   onMouseEnterLayer (): void {
