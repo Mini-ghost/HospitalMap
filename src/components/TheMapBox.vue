@@ -75,13 +75,25 @@ export default class TheMapBox extends Vue {
   }
 
   onClick ({ point }: mapboxgl.MapMouseEvent): void {
-    const features = this._map.queryRenderedFeatures(
-      point, 
-      { layers: [POINT_NAME] }
-    )
+    const features =
+      this._map.queryRenderedFeatures(point, { layers: [POINT_NAME] })
+
     if(features.length) {
+      const [ feature ] = features
+
+      // https://stackoverflow.com/questions/55621480/cant-access-coordinates-member-of-geojson-feature-collection
+      if(feature.geometry.type !== 'Point') return
+      // 座標
+      const { coordinates } = feature.geometry
       // 動物醫院 id
-      const { id } = features[0].properties as {[key: string]: string}
+      const { id } = feature.properties as {[key: string]: string}
+
+      this._map.flyTo({
+        center: coordinates as [number, number],
+        duration: 500,
+        zoom: 14
+      })
+
       vetModule.GET_VET_DETAIL(id)
       return
     }
