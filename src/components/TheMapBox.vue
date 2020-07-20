@@ -41,8 +41,8 @@ export default class TheMapBox extends Vue {
   mapAddEventListener (): void {
     this._map
       .on('load', this.onLoad)
-      .on('click', this.onClickVet)
-      .on('click', USER_NAME , this.onClickUser)
+      .on('click', this._clickBuffer(this.onClickVet))
+      .on('click', USER_NAME , this._clickBuffer(this.onClickUser))
       .on('mouseenter', USER_NAME, this.onMouseEnterLayer)
       .on('mouseleave', USER_NAME, this.onMouseLeaveLayer)
       .on('mouseenter', POINT_NAME, this.onMouseEnterLayer)
@@ -210,6 +210,18 @@ export default class TheMapBox extends Vue {
         }
       )
     })
+  }
+
+  /**
+   * click 與 dbclick 之間的緩衝
+   */
+  private _clickBuffer (fn: Function, sec = 160) {
+    return (...arg: unknown[]) => {
+      const timer = setTimeout(() => fn(arg), sec)
+      this._map.on('dblclick', () => {
+        clearTimeout(timer)
+      })
+    }
   }
 }
 </script>
