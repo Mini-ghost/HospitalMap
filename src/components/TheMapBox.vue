@@ -35,8 +35,14 @@ mapboxgl.accessToken = process.env.VUE_APP_MAP_TOKEN
 })
 export default class TheMapBox extends Vue {
   private _map!: mapboxgl.Map
+  private _selected!: mapboxgl.GeoJSONSourceRaw;
 
   $el!: HTMLElement
+
+  /**
+   * selected Layer 是否初始化過
+   */
+  selectedInit = false
 
   mapAddEventListener (): void {
     this._map
@@ -85,30 +91,30 @@ export default class TheMapBox extends Vue {
   }
 
   onClickVet ({ point }: mapboxgl.MapMouseEvent): void {
-    const features =
+    const [feature] =
       this._map.queryRenderedFeatures(point, { layers: [POINT_NAME] })
 
-    if(features.length) {
-      const [ feature ] = features
-
-      // https://stackoverflow.com/questions/55621480/cant-access-coordinates-member-of-geojson-feature-collection
-      if(feature.geometry.type !== 'Point') return
-      // 座標
-      const { coordinates } = feature.geometry
-      // 動物醫院 id
-      const { id } = feature.properties as {[key: string]: string}
-
-      this._map.flyTo({
-        center: coordinates as [number, number],
-        duration: 500,
-        zoom: 14
-      })
-
-      vetModule.GET_VET_DETAIL(id)
+    if(!feature) {
+      this.setSelectedLayer()
+      vetModule.SET_VET_DETAIL()
       return
     }
+    if(feature.geometry.type !== 'Point') return
 
-    vetModule.SET_VET_DETAIL()
+    // 座標
+    const coordinates = feature.geometry.coordinates as [number, number]
+    // 動物醫院 id
+    const { id } = feature.properties as {[key: string]: string}
+
+
+    this.setSelectedLayer(coordinates)
+    this._map.flyTo({
+      center: coordinates,
+      duration: 500,
+      zoom: 14
+    })
+
+    vetModule.GET_VET_DETAIL(id)
   }
 
   onClickUser ({ point }: mapboxgl.MapMouseEvent): void {
@@ -210,6 +216,56 @@ export default class TheMapBox extends Vue {
         }
       )
     })
+  }
+
+  setSelectedLayer (coordinates?: [number, number]) {
+    if(!coordinates) {
+      this.selectedInit &&
+      this._map.setLayoutProperty('selected', 'visibility', 'none')
+      return
+    }
+
+    const selected: mapboxgl.GeoJSONSourceRaw = {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates },
+            properties: { icon: USER_NAME }
+          }
+        ]
+      },
+    }
+
+    // 如果為 undefined 表示並未點選過標記
+    if(this._selected) {
+      this._map
+        .getSource('selected')
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        .setData(selected.data)
+
+      this._map.setLayoutProperty('selected', 'visibility', 'visible')
+      this._selected = selected
+      return
+    }
+
+    // 初始化 Layer
+    this._map.addSource('selected', selected)
+    this._map.addLayer({
+      id: 'selected',
+      type: 'symbol',
+      source: 'selected',
+      layout: {
+        'icon-image': ['get', 'icon'],
+        'icon-allow-overlap':true
+      }
+    })
+    this._map.setLayoutProperty('selected', 'visibility', 'visible')
+    this._selected = selected
+    this.selectedInit = true
   }
 
   /**
