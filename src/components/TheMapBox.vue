@@ -9,17 +9,17 @@ import mapboxgl from 'mapbox-gl'
 import { vetModule } from '@/store'
 
 const POINT_NAME = 'point'
+const USER_NAME = 'user'
 
 mapboxgl.accessToken = process.env.VUE_APP_MAP_TOKEN
 
 @Component<TheMapBox>({
   name: 'TheMapBox',
+  created () {
+    vetModule.GET_VET_DATA()
+      .then(this.mapAddVetLayer)
+  },
   mounted() {
-    const loadImageCallback = (error: Error, image: ImageData) => {
-      if (error) throw error
-      this._map.addImage(POINT_NAME, image)
-    }
-
     // 初始化 MapBox GL js
     this._map = new mapboxgl.Map({
       container: this.$el,
@@ -29,10 +29,7 @@ mapboxgl.accessToken = process.env.VUE_APP_MAP_TOKEN
       zoom: 14
     })
 
-    this._map.loadImage(
-      'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
-      loadImageCallback
-    )
+    this.mapLoadImage()
     this.mapAddEventListener()
   }
 })
@@ -40,22 +37,6 @@ export default class TheMapBox extends Vue {
   private _map!: mapboxgl.Map
 
   $el!: HTMLElement
-
-  get source () {
-    const features = vetModule.vetData
-      .map(item => ({
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: item.coordinates },
-        properties: { id: item.name, icon: POINT_NAME }
-      }))
-
-    return {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features },
-      cluster: true,
-      clusterRadius: 15
-    }
-  }
 
   mapAddEventListener (): void {
     this._map
@@ -66,12 +47,7 @@ export default class TheMapBox extends Vue {
   }
 
   onLoad () {
-    this.mapAddLayer()
     this.getGeolocation()
-      .then(({ type, center }) => {
-        if(!type) return
-        this._map.setCenter(center)
-      })
   }
 
   onClick ({ point }: mapboxgl.MapMouseEvent): void {
@@ -109,11 +85,58 @@ export default class TheMapBox extends Vue {
     this._map.getCanvas().style.cursor = ''
   }
 
-  mapAddLayer (): void {
+  /**
+   * 載入標記用圖片
+   */
+  mapLoadImage () {
+    // 一般動物醫院標記
+    this._map
+      .loadImage(
+        'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+        (error: Error, image: ImageData) => {
+          if (error) throw error
+          this._map.addImage(POINT_NAME, image)
+        }
+      )
+
+    // 使用者標記
+    this._map
+      .loadImage(
+        'https://avatars0.githubusercontent.com/u/39984251?s=30&v=4',
+        (error: Error, image: ImageData) => {
+          if (error) throw error
+          this._map.addImage(USER_NAME, image)
+        }
+      )
+  }
+
+  /**
+   * 畫上動物醫院標記
+   */
+  mapAddVetLayer () {
+    const features = vetModule.vetData
+      .map(item => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: item.coordinates },
+        properties: {
+          id: item.name,
+          icon: POINT_NAME
+        }
+      }))
+
+    const source = {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features
+      }
+    } as mapboxgl.GeoJSONSourceRaw
+
+    this._map.addSource('vet-map', source)
     this._map.addLayer({
       id: POINT_NAME,
       type: 'symbol',
-      source: this.source as mapboxgl.GeoJSONSourceRaw,
+      source: 'vet-map',
       minzoom: 5,
       layout: {
         'icon-image': ['get', 'icon']
@@ -126,7 +149,7 @@ export default class TheMapBox extends Vue {
       navigator.geolocation.getCurrentPosition (
         ({ coords }) => {
           resolve({
-            type: false,
+            type: true,
             center: [coords.longitude, coords.latitude]
           })
         },
