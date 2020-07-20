@@ -48,6 +48,37 @@ export default class TheMapBox extends Vue {
 
   onLoad () {
     this.getGeolocation()
+      .then(({ center }) => {
+
+        const source = {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: { type: 'Point', coordinates: center },
+                properties: { icon: USER_NAME }
+              }
+            ]
+          },
+          cluster: true,
+          clusterRadius: 15
+        } as mapboxgl.GeoJSONSourceRaw
+
+        this._map
+          .setCenter(center)
+          .addSource(USER_NAME, source)
+          .addLayer({
+            id: USER_NAME,
+            type: 'symbol',
+            source: USER_NAME,
+            minzoom: 5,
+            layout: {
+              'icon-image': ['get', 'icon']
+            }
+          })
+    })
   }
 
   onClick ({ point }: mapboxgl.MapMouseEvent): void {
