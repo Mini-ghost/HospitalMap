@@ -64,7 +64,6 @@ export default class VetModule extends VuexModule {
   SET_VET_DETAIL(detail?: VetData) {
     if (detail) {
       this.vetDetail = detail
-      console.log(this.vetDetail)
       return
     }
     this.vetDetail = null
@@ -93,7 +92,7 @@ export default class VetModule extends VuexModule {
       this.SET_VET_DETAIL(vetDeatil)
       return Promise.resolve(vetDeatil)
     }
-    
+
     return Promise.reject()
   }
 }
