@@ -6,9 +6,9 @@
     <div
       v-if="vetDetail"
       :key="vetDetail.name"
-      class="info absolute md:inset-4 inset-0 top-32 md:max-w-md w-full bg-gray-100 p-5 pr-0 md:rounded-xl rounded-t-xl shadow-xl"
+      class="info fixed md:inset-4 inset-0 top-32 md:max-w-md w-full bg-gray-100 p-5 pr-0 md:rounded-xl rounded-t-xl shadow-xl"
     >
-      <div class="pr-5 overflow-y-auto h-full custom-x-scrollbar">
+      <div class="pr-5 overflow-y-auto h-full scrolling-touch custom-x-scrollbar">
         <header class="info-header">
           <!-- 標題 -->
           <h2 class="text-3xl font-bold">
@@ -195,8 +195,6 @@ export default class TheInfoSide extends Vue {
 
 <style lang="scss">
 @mixin -webkit-custom-scrollbar {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: auto;
   &::-webkit-scrollbar {
     width: 14px;
   }
