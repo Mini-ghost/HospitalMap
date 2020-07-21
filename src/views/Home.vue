@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <TheMapBox />
+    <the-map-box />
   </div>
 </template>
 
