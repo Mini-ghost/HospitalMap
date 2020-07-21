@@ -88,6 +88,7 @@
               </template>
             </div>
           </section>
+          <!-- 看診時間 -->
           <section class="mb-5 last:mb-0">
             <h3 class="text-2xl font-bold ">
               看診時間
@@ -109,6 +110,21 @@
                 </tr>
               </tbody>
             </table>
+          </section>
+          <!-- 醫院照片 -->
+          <section
+            v-if="vetDetail.outward"
+            class="mb-5 last:mb-0"
+          >
+            <h3 class="text-2xl font-bold">
+              醫院照片
+            </h3>
+            <img
+              :src="vetDetail.outward"
+              :alt="vetDetail.name"
+              class="w-full object-cover h-64 rounded-lg bg-gray-300 my-2"
+              loading="lazy"
+            >
           </section>
         </main>
       </div>
