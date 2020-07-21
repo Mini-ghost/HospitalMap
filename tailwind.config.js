@@ -7,7 +7,8 @@ module.exports = {
   theme: {
     extend: {
       inset: {
-        '4': '1rem'
+        '4': '1rem',
+        '32': '8rem'
       },
       borderRadius: {
         'xl': '1rem'
