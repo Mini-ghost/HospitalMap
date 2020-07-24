@@ -16,6 +16,13 @@
     >
       Search
     </button>
+    <button
+      aria-label="進階搜尋"
+      class="advanced-tooltip relative md:rounded-xl px-1 py-2 bg-gray-100 flex-none ml-2 shadow-md focus:outline-none border-2 border-transparent focus:bg-white focus:border-gray-500 transition duration-100 transform active:scale-95"
+      type="button"
+    >
+      ▸
+    </button>
   </div>
 </template>
 
@@ -40,3 +47,30 @@ export default class TheSearch extends Vue {
 }
 </script>
 
+<style lang="scss">
+.advanced-tooltip {
+  @media (min-width: 768px) {
+    // variable
+    $space: 10px;
+    --color-text: #efefef;
+    --color-background: #232323;
+
+    &:hover:after {
+      content: attr(aria-label);
+      position: absolute;
+      top: calc(100% + #{$space});
+      left: 0px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 6px 10px;
+      color: var(--color-text);
+      background-color: var(--color-background);
+      text-align: center;
+      word-wrap: break-word;
+      white-space: pre;
+      border-radius: .5rem;
+      z-index: 999;
+    }
+  }
+}
+</style>
