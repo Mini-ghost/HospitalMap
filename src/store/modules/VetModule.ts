@@ -28,6 +28,30 @@ export default class VetModule extends VuexModule {
   vetData: Readonly<VetData[]> = []
   vetDetail: VetData | null = null
 
+  /**
+   * 篩選條件
+   */
+  vetFilter = {
+    /**搜尋框 */
+    search: ''
+  }
+
+  /**
+   * 條件篩選過後的 vetData
+   */
+  get syncVetData() {
+    return this.vetData
+      .filter((item) => item.name.includes(this.vetFilter.search))
+  }
+
+  @Mutation
+  SET_SEARCH(filter: Partial<VetModule['vetFilter']>) {
+    this.vetFilter = {
+      ...this.vetFilter,
+      ...filter
+    }
+  }
+
   @Mutation
   SET_VET_DATA(json: LegacyVetData[]) {
     const initData = json.map(item => ({

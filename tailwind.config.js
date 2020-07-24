@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       inset: {
         '4': '1rem',
+        '19': '4.75rem',
         '32': '8rem'
       },
       borderRadius: {
@@ -18,7 +19,9 @@ module.exports = {
   variants: {
     responsive: ['responsive'],
     borderWidth: ['last'],
-    margin: ['last']
+    margin: ['last'],
+    outline: ['focus'],
+    scale: ['active']
   },
   plugins: [],
 }

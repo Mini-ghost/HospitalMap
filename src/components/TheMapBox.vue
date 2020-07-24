@@ -15,9 +15,32 @@ mapboxgl.accessToken = process.env.VUE_APP_MAP_TOKEN
 
 @Component<TheMapBox>({
   name: 'TheMapBox',
-  created () {
-    vetModule.GET_VET_DATA()
-      .then(this.mapAddVetLayer)
+  async created () {
+    await vetModule.GET_VET_DATA()
+
+    this.mapAddVetLayer()
+    const unwatch = this.$watch('syncVetData', (val: TheMapBox['syncVetData']) => {
+      const features = val
+        .map(item => ({
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: item.coordinates },
+          properties: {
+            id: item.name,
+            icon: POINT_NAME
+          }
+        }))
+
+      this._map
+        .getSource('vet-map')
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+        .setData({
+          type: 'FeatureCollection',
+          features
+        })
+    })
+
+    this.$once('hook:beforeDestroy', unwatch)
   },
   mounted() {
     // 初始化 MapBox GL js
@@ -43,6 +66,13 @@ export default class TheMapBox extends Vue {
    * selected Layer 是否初始化過
    */
   selectedInit = false
+
+  /**
+   * 條件篩選過後的 vetData
+   */
+  get syncVetData() {
+    return vetModule.syncVetData
+  }
 
   mapAddEventListener (): void {
     this._map
