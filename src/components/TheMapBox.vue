@@ -8,8 +8,15 @@ import mapboxgl from 'mapbox-gl'
 
 import { vetModule } from '@/store'
 
-const POINT_NAME = 'point'
-const USER_NAME = 'user'
+// 地圖標記
+import iconPoint from '@/assets/point-normal.png'
+import iconSelect from '@/assets/point-select.png'
+import iconUser from '@/assets/point-user.png'
+
+// 標記代稱
+const POINT_KEY = 'point'
+const SELECT_KEY = 'select'
+const USER_KEY = 'user'
 
 mapboxgl.accessToken = process.env.VUE_APP_MAP_TOKEN
 
@@ -26,7 +33,7 @@ mapboxgl.accessToken = process.env.VUE_APP_MAP_TOKEN
           geometry: { type: 'Point', coordinates: item.coordinates },
           properties: {
             id: item.name,
-            icon: POINT_NAME
+            icon: POINT_KEY
           }
         }))
 
@@ -78,11 +85,11 @@ export default class TheMapBox extends Vue {
     this._map
       .on('load', this.onLoad)
       .on('click', this._clickBuffer(this.onClickVet))
-      .on('click', USER_NAME , this._clickBuffer(this.onClickUser))
-      .on('mouseenter', USER_NAME, this.onMouseEnterLayer)
-      .on('mouseleave', USER_NAME, this.onMouseLeaveLayer)
-      .on('mouseenter', POINT_NAME, this.onMouseEnterLayer)
-      .on('mouseleave', POINT_NAME, this.onMouseLeaveLayer)
+      .on('click', USER_KEY , this._clickBuffer(this.onClickUser))
+      .on('mouseenter', USER_KEY, this.onMouseEnterLayer)
+      .on('mouseleave', USER_KEY, this.onMouseLeaveLayer)
+      .on('mouseenter', POINT_KEY, this.onMouseEnterLayer)
+      .on('mouseleave', POINT_KEY, this.onMouseLeaveLayer)
   }
 
   onLoad () {
@@ -97,7 +104,7 @@ export default class TheMapBox extends Vue {
               {
                 type: 'Feature',
                 geometry: { type: 'Point', coordinates: center },
-                properties: { icon: USER_NAME }
+                properties: { icon: USER_KEY }
               }
             ]
           },
@@ -107,11 +114,11 @@ export default class TheMapBox extends Vue {
 
         this._map
           .setCenter(center)
-          .addSource(USER_NAME, source)
+          .addSource(USER_KEY, source)
           .addLayer({
-            id: USER_NAME,
+            id: USER_KEY,
             type: 'symbol',
-            source: USER_NAME,
+            source: USER_KEY,
             minzoom: 5,
             layout: {
               'icon-image': ['get', 'icon']
@@ -122,7 +129,7 @@ export default class TheMapBox extends Vue {
 
   onClickVet ({ point }: mapboxgl.MapMouseEvent): void {
     const [feature] =
-      this._map.queryRenderedFeatures(point, { layers: [POINT_NAME] })
+      this._map.queryRenderedFeatures(point, { layers: [POINT_KEY] })
 
     if(!feature) {
       this.setSelectedLayer()
@@ -149,7 +156,7 @@ export default class TheMapBox extends Vue {
 
   onClickUser ({ point }: mapboxgl.MapMouseEvent): void {
     const [feature] =
-      this._map.queryRenderedFeatures(point, { layers: [USER_NAME] })
+      this._map.queryRenderedFeatures(point, { layers: [USER_KEY] })
 
     if(feature.geometry.type !== 'Point') return
     this._map.flyTo({
@@ -173,21 +180,25 @@ export default class TheMapBox extends Vue {
   mapLoadImage () {
     // 一般動物醫院標記
     this._map
-      .loadImage(
-        'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
-        (error: Error, image: ImageData) => {
+      .loadImage(iconPoint, (error: Error, image: ImageData) => {
           if (error) throw error
-          this._map.addImage(POINT_NAME, image)
+          this._map.addImage(POINT_KEY, image)
+        }
+      )
+
+    // 點選的動物醫院標記
+    this._map
+      .loadImage(iconSelect, (error: Error, image: ImageData) => {
+          if (error) throw error
+          this._map.addImage(SELECT_KEY, image)
         }
       )
 
     // 使用者標記
     this._map
-      .loadImage(
-        'https://avatars0.githubusercontent.com/u/39984251?s=30&v=4',
-        (error: Error, image: ImageData) => {
+      .loadImage(iconUser, (error: Error, image: ImageData) => {
           if (error) throw error
-          this._map.addImage(USER_NAME, image)
+          this._map.addImage(USER_KEY, image)
         }
       )
   }
@@ -202,7 +213,7 @@ export default class TheMapBox extends Vue {
         geometry: { type: 'Point', coordinates: item.coordinates },
         properties: {
           id: item.name,
-          icon: POINT_NAME
+          icon: POINT_KEY
         }
       }))
 
@@ -216,7 +227,7 @@ export default class TheMapBox extends Vue {
 
     this._map.addSource('vet-map', source)
     this._map.addLayer({
-      id: POINT_NAME,
+      id: POINT_KEY,
       type: 'symbol',
       source: 'vet-map',
       minzoom: 5,
@@ -263,7 +274,7 @@ export default class TheMapBox extends Vue {
           {
             type: 'Feature',
             geometry: { type: 'Point', coordinates },
-            properties: { icon: USER_NAME }
+            properties: { icon: SELECT_KEY }
           }
         ]
       },
@@ -290,6 +301,8 @@ export default class TheMapBox extends Vue {
       source: 'selected',
       layout: {
         'icon-image': ['get', 'icon'],
+        // 圖片放大
+        'icon-size': 1.333,
         'icon-allow-overlap':true
       }
     })
