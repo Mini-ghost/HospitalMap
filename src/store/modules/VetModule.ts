@@ -116,7 +116,6 @@ export default class VetModule extends VuexModule {
 
   @Mutation
   SET_SEARCH(filter: string | Partial<VetModule['vetFilter']>) {
-    console.log(filter)
     if (typeof filter === 'string') {
       filter = {
         search: filter
