@@ -176,6 +176,7 @@ export default class TheFilterBox extends Vue {
       status: form.status
     }
     vetModule.SET_SEARCH(query)
+    this.$emit('input', false)
   }
 
   onReset() {
