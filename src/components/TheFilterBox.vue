@@ -39,7 +39,7 @@
           </select>
         </form-item>
         <!-- 寵物分類（複選） -->
-        <!-- <form-item label="寵物分類">
+        <form-item label="寵物分類">
           <div class="-m-1">
             <label
               v-for="{ name, id } in pets"
@@ -57,9 +57,9 @@
               </span>
             </label>
           </div>
-        </form-item> -->
+        </form-item>
         <!-- 寵物分類（開關） -->
-        <!-- <form-item label="看診狀態">
+        <form-item label="看診狀態">
           <div class="-m-1">
             <label class="mx-1 my-3 inline-block cursor-pointer select-none">
               <input
@@ -72,7 +72,7 @@
               </span>
             </label>
           </div>
-        </form-item> -->
+        </form-item>
         <!-- 送出按鈕 -->
         <form-item class="table ml-auto">
           <button

@@ -1,6 +1,8 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import type { LegacyVetData } from '@/store/modules/VetModule.type'
 
+// TODO: 將 pet 更名為 pets
+// TODO: 將 pet 的內容更正為代號
 export interface VetData {
   name: string;
   phone: string;
@@ -103,7 +105,14 @@ export default class VetModule extends VuexModule {
    * 條件篩選過後的 vetData
    */
   get syncVetData () {
-    const { vetFilter: filter } =  this
+    const { vetFilter: filter } = this
+
+    // 過濾營業鐘用
+    const dateInstance = new Date()
+    const today = dateInstance.getDay() - 1 !== -1
+      ? dateInstance.getDay() - 1
+      : 6
+    
     return this.vetData
       .filter(({ name }) => name.includes(filter.search))
       .filter(({ district }) => {
@@ -111,6 +120,47 @@ export default class VetModule extends VuexModule {
           id === filter.district
         ))?.name
         return !name || (district === name)
+      })
+      .filter(({ pet }) => pet.some(pet => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const id = this.pets.find(({ name }) => name === pet)?.id!
+        return (
+          !filter.pets.length ||
+          filter.pets.includes(id)
+        )
+      }))
+      .filter(({ detailTime }) => {
+        if (!filter.status) {
+          return true
+        }
+        const comparison: boolean[] = []
+        let hours: string | number = dateInstance.getHours()
+        let minutes: string | number = dateInstance.getMinutes()
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const ranges = detailTime[today]
+          .split(', ')
+        
+        const analysisIsOpen = (test: string[]) => {
+          const [ start, end ] = test
+    
+          if (hours < 10) hours = '0' + hours
+          if (minutes < 10) minutes = '0' + minutes
+    
+          const now = `${hours}:${minutes}`
+    
+          now > start && now < end
+            ? comparison.push(true)
+            : comparison.push(false)
+        }
+        
+        for(let i = 0, l = ranges.length; i < l; i++) {
+          const range = ranges[i]
+          range !== undefined && range !== '休息'
+            ? analysisIsOpen(range.split('–'))
+            : comparison.push(false)
+        }
+        return comparison.some(state => state)
       })
   }
 
