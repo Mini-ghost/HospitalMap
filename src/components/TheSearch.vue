@@ -20,6 +20,7 @@
       aria-label="進階搜尋"
       class="advanced-tooltip relative md:rounded-xl px-1 py-2 bg-gray-100 flex-none ml-2 shadow-md focus:outline-none border-2 border-transparent focus:bg-white focus:border-gray-500 transition duration-100 transform active:scale-95"
       type="button"
+      @click="() => $emit('click-more')"
     >
       ▸
     </button>
