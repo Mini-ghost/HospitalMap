@@ -24,7 +24,7 @@ import TheFilterBox from '@/components/TheFilterBox.vue'
   }
 })
 export default class Home extends Vue {
-  isFilering = true
+  isFilering = false
 
   onToggleFilter () {
     this.isFilering = !this.isFilering 
