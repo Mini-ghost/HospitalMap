@@ -96,7 +96,7 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 
-import { Component, Vue, Model } from 'vue-property-decorator'
+import { Component, Vue, Model, Watch } from 'vue-property-decorator'
 import { vetModule } from '@/store'
 
 class FilterForm {
@@ -181,6 +181,11 @@ export default class TheFilterBox extends Vue {
 
   onReset() {
     this.filterForm = new FilterForm()
+  }
+
+  @Watch('$store.state.vetModule.vetFilter.search')
+  searchNameChange(value: string) {
+    this.filterForm.name = value
   }
 
 }
