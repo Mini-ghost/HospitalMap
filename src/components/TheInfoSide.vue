@@ -6,7 +6,7 @@
     <div
       v-if="vetDetail"
       :key="vetDetail.name"
-      class="info fixed md:top-19 md:right-4 md:bottom-4 md:left-4 inset-0 top-32 md:max-w-md w-full bg-gray-100 p-5 pr-0 md:rounded-xl rounded-t-xl shadow-md"
+      class="info fixed md:top-19 top-32 right-4 md:bottom-4 bottom-0 left-4 md:max-w-md bg-gray-100 p-5 pr-0 md:rounded-xl rounded-t-xl shadow-md"
     >
       <div class="pr-5 overflow-y-auto h-full scrolling-touch custom-x-scrollbar">
         <header class="info-header">
