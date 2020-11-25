@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 
 import VetModuleClass from '@/store/modules/VetModule'
 import { vetModule } from '@/store'
@@ -44,6 +44,11 @@ export default class TheSearch extends Vue {
       search: this.searchText
     }
     vetModule.SET_SEARCH(filter)
+  }
+
+  @Watch('$store.state.vetModule.vetFilter.search')
+  searchNameChange(value: string) {
+    this.searchText = value
   }
 }
 </script>
