@@ -1,6 +1,8 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import type { LegacyVetData } from '@/store/modules/VetModule.type'
 
+// TODO: 將 pet 更名為 pets
+// TODO: 將 pet 的內容更正為代號
 export interface VetData {
   name: string;
   phone: string;
@@ -17,6 +19,13 @@ export interface VetData {
   outward: string;
 }
 
+type VetFilter = {
+  search: string;
+  district: number;
+  pets: string[];
+  status: boolean;
+}
+
 const key = '1B1eNzcuoSqxskYxoHynO3EOj49Pchjg_8RkyjjcQIMo'
 const url = `https://spreadsheets.google.com/feeds/list/${key}/1/public/values?alt=json`
 
@@ -25,27 +34,144 @@ const url = `https://spreadsheets.google.com/feeds/list/${key}/1/public/values?a
   namespaced: true
 })
 export default class VetModule extends VuexModule {
+  districts = [
+    { name: '中區', id: 400 },
+    { name: '東區', id: 401 },
+    { name: '南區', id: 402 },
+    { name: '西區', id: 403 },
+    { name: '北區', id: 404 },
+    { name: '北屯區', id: 406 },
+    { name: '西屯區', id: 407 },
+    { name: '南屯區', id: 408 },
+    { name: '太平區', id: 411 },
+    { name: '大里區', id: 412 },
+    { name: '霧峰區', id: 413 },
+    { name: '烏日區', id: 414 },
+    { name: '豐原區', id: 420 },
+    { name: '后里區', id: 421 },
+    { name: '石岡區', id: 422 },
+    { name: '東勢區', id: 423 },
+    { name: '和平區', id: 424 },
+    { name: '新社區', id: 426 },
+    { name: '潭子區', id: 427 },
+    { name: '大雅區', id: 428 },
+    { name: '神岡區', id: 429 },
+    { name: '大肚區', id: 432 },
+    { name: '沙鹿區', id: 433 },
+    { name: '龍井區', id: 434 },
+    { name: '梧棲區', id: 435 },
+    { name: '清水區', id: 436 },
+    { name: '大甲區', id: 437 },
+    { name: '外埔區', id: 438 },
+    { name: '大安區', id: 439 }
+  ]
+
+  pets = [
+    { name: '貓', id: 'cat' },
+    { name: '狗', id: 'dog' },
+    { name: '老鼠', id: 'mouse' },
+    { name: '兔子', id: 'rabbit' },
+    { name: '蜜袋鼯', id: 'honeyBag' },
+    { name: '鳥類', id: 'bird' },
+    { name: '爬蟲類', id: 'reptile' }
+  ]
+
   vetData: Readonly<VetData[]> = []
   vetDetail: VetData | null = null
 
   /**
    * 篩選條件
    */
-  vetFilter = {
-    /**搜尋框 */
-    search: ''
+  vetFilter: VetFilter = {
+    /** 文字搜尋框 */
+    search: '',
+    /** 
+     * 區域郵遞區號
+     * 全選為 0
+     */
+    district: 0,
+    /**
+     * 動物分類 id 陣列
+     * 全選留空白
+     */
+    pets: [],
+    /**
+     * 當下是否為營業狀態
+     */
+    status: true,
   }
 
   /**
    * 條件篩選過後的 vetData
    */
-  get syncVetData() {
+  get syncVetData () {
+    const { vetFilter: filter } = this
+
+    // 過濾營業鐘用
+    const dateInstance = new Date()
+    const today = dateInstance.getDay() - 1 !== -1
+      ? dateInstance.getDay() - 1
+      : 6
+    
     return this.vetData
-      .filter((item) => item.name.includes(this.vetFilter.search))
+      .filter(({ name }) => name.includes(filter.search))
+      .filter(({ district }) => {
+        const name = this.districts.find(({ id }) => (
+          id === filter.district
+        ))?.name
+        return !name || (district === name)
+      })
+      .filter(({ pet }) => pet.some(pet => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const id = this.pets.find(({ name }) => name === pet)?.id!
+        return (
+          !filter.pets.length ||
+          filter.pets.includes(id)
+        )
+      }))
+      .filter(({ detailTime }) => {
+        if (!filter.status) {
+          return true
+        }
+        const comparison: boolean[] = []
+        let hours: string | number = dateInstance.getHours()
+        let minutes: string | number = dateInstance.getMinutes()
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const ranges = detailTime[today]
+          .split(', ')
+        
+        const analysisIsOpen = (test: string[]) => {
+          const [ start, end ] = test
+    
+          if (hours < 10) hours = '0' + hours
+          if (minutes < 10) minutes = '0' + minutes
+    
+          const now = `${hours}:${minutes}`
+    
+          now > start && now < end
+            ? comparison.push(true)
+            : comparison.push(false)
+        }
+        
+        for(let i = 0, l = ranges.length; i < l; i++) {
+          const range = ranges[i]
+          range !== undefined && range !== '休息'
+            ? analysisIsOpen(range.split('–'))
+            : comparison.push(false)
+        }
+        return comparison.some(state => state)
+      })
   }
 
   @Mutation
-  SET_SEARCH(filter: Partial<VetModule['vetFilter']>) {
+  SET_SEARCH(filter: string | Partial<VetModule['vetFilter']>) {
+    if (typeof filter === 'string') {
+      filter = {
+        search: filter
+      }
+    }
+
     this.vetFilter = {
       ...this.vetFilter,
       ...filter

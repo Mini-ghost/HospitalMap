@@ -20,6 +20,7 @@
       aria-label="進階搜尋"
       class="advanced-tooltip relative rounded-xl px-1 py-2 bg-gray-100 flex-none ml-2 shadow-md focus:outline-none border-2 border-transparent focus:bg-white focus:border-gray-500 transition duration-100 transform active:scale-95"
       type="button"
+      @click="() => $emit('click-more')"
     >
       ▸
     </button>
@@ -27,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 
 import VetModuleClass from '@/store/modules/VetModule'
 import { vetModule } from '@/store'
@@ -43,6 +44,11 @@ export default class TheSearch extends Vue {
       search: this.searchText
     }
     vetModule.SET_SEARCH(filter)
+  }
+
+  @Watch('$store.state.vetModule.vetFilter.search')
+  searchNameChange(value: string) {
+    this.searchText = value
   }
 }
 </script>
